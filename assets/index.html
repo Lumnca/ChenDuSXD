@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>课程总览</title>
+    <title>主页</title>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -20,13 +20,15 @@
                 <el-row :gutter="20">
                     <el-col :span="4">
                         <div style="float:left;">
-                            <el-button type="text" @click="rehref('index.html')"><span style="font-size:32px;"><i
-                                        class="el-icon-platform-eleme"></i>少先队</span></el-button>
+                            <el-button type="text" @click="rehref('index.html')">
+                                <span>
+                                    <img src="img/sxd.jpg" width="38" height="38"> </span>
+                            </el-button>
                         </div>
                     </el-col>
                     <el-col :span="13">
-                        <div>
-                            广告招商位
+                        <div style="font-size:24px;">
+                            成都少先队
                         </div>
                     </el-col>
                     <el-col :span="5">
@@ -94,13 +96,75 @@
                 <el-container>
                     <el-main>
                         <div>
-                            <el-carousel indicator-position="outside">
+                            <el-carousel indicator-position="outside" height="400px">
                                 <el-carousel-item v-for="item in 4" :key="item">
-                                    <h3>{{ item }}</h3>
+                                    <div>
+                                        <img src="img/lb.png" width="1600">
+                                    </div>
                                 </el-carousel-item>
                             </el-carousel>
                         </div>
                         <br><br>
+                        <div>
+                            <el-row>
+
+                                <el-col :offset="1" :span="5">
+                                    <el-card>
+
+                                        <img src="img/mst.png" class="image">
+                                        <div>
+                                            
+                                            <div class="bottom clearfix">
+
+                                                <el-button type="text" class="button"><span style="font-size:24px;">名师堂</span></el-button>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+
+                                <el-col :offset="1" :span="5">
+                                    <el-card>
+                                        <img src="img/myg.png" class="image">
+                                        <div>
+                                          
+                                            <div class="bottom clearfix">
+
+                                                <el-button type="text" class="button">  <span style="font-size:24px;">名医馆</span></el-button>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+
+                                <el-col :offset="1" :span="5">
+                                    <el-card>
+                                        <img src="img/wddb.png" class="image">
+                                        <div>
+                                           
+                                            <div class="bottom clearfix">
+
+                                                <el-button type="text" class="button"> <span style="font-size:24px;">我的队报</span></el-button>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+
+                                <el-col :offset="1" :span="5">
+                                        <el-card>
+                                            <img src="img/dlxx.png" class="image">
+                                            <div>
+                                               
+                                                <div class="bottom clearfix">
+    
+                                                    <el-button type="text" class="button"> <span style="font-size:24px;">队内消息</span></el-button>
+                                                </div>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+    
+
+                            </el-row>
+                        </div>
+                        <br>
                         <div>
                             <el-row :gutter="20">
                                 <el-col :span="12">
@@ -154,39 +218,39 @@
                                     <div>
                                         <el-divider content-position="right">公告</el-divider>
                                         <div class="list">
-                                                <el-row :gutter="20">
-                                                    <el-col :span="20">
-                                                        <a href="#">系统更新</a>
-                                                    </el-col>
-                                                    <el-col :span="4">
-                                                        4-25
-                                                    </el-col>
-                                                </el-row>
-                                                <el-row :gutter="20">
-                                                    <el-col :span="20">
-                                                        <a href="#">渣渣周士林</a>
-                                                    </el-col>
-                                                    <el-col :span="4">
-                                                        4-25
-                                                    </el-col>
-                                                </el-row>
-                                            </div>
+                                            <el-row :gutter="20">
+                                                <el-col :span="20">
+                                                    <a href="#">系统更新</a>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                    4-25
+                                                </el-col>
+                                            </el-row>
+                                            <el-row :gutter="20">
+                                                <el-col :span="20">
+                                                    <a href="#">BUG修复</a>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                    4-25
+                                                </el-col>
+                                            </el-row>
+                                        </div>
                                     </div>
                                 </el-col>
                                 <el-col :span="6">
                                     <div>
                                         <el-divider content-position="right">链接</el-divider>
                                         <div class="list">
-                                                <div>SB玩意周士林的狗鸡儿网站</div>
-                                                <div>周士林高清py视频</div>
-                                                <div>周士林大战某泽鹏</div>
+                                            <div>-------------------</div>
+                                            <div>-------------------</div>
+                                            <div>-------------------</div>
                                         </div>
                                     </div>
                                 </el-col>
                             </el-row>
                         </div>
                     </el-main>
-                    <el-footer>
+                    <el-footer style="margin-top:80px;">
                         Copyright © 2020 Tencent. All Rights Reserved.
                         <br>
                         XXXX有限公司 版权所有

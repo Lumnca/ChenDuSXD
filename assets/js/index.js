@@ -83,6 +83,7 @@ var app = new Vue({
         colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
         currentPage: 1,
         pages: 5,
-        isLoginCheck : '未登录'
+        isLoginCheck : '未登录',
+        activeName : 'first'
     }
 });
