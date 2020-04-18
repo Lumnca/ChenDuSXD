@@ -20,7 +20,7 @@
                 <el-row :gutter="20">
                     <el-col :span="4">
                         <div style="float:left;">
-                            <el-button type="text" @click="rehref('index.html')">
+                            <el-button type="text" @click="reload('index.html')">
                                 <span>
                                     <img src="img/sxd.jpg" width="38" height="38"> </span>
                             </el-button>
@@ -46,7 +46,7 @@
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item>{{user.name}}</el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-button type="text" @click="rehref('../index.html')"><span><i
+                                        <el-button type="text" @click="reload('user.html')"><span><i
                                                     class="el-icon-suitcase"></i>用户中心</span></el-button>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -116,7 +116,7 @@
                                             
                                             <div class="bottom clearfix">
 
-                                                <el-button type="text" class="button"><span style="font-size:24px;">名师堂</span></el-button>
+                                                <el-button type="text" @click="reload('mst.html')" class="button"><span style="font-size:24px;">名师堂</span></el-button>
                                             </div>
                                         </div>
                                     </el-card>
@@ -129,7 +129,7 @@
                                           
                                             <div class="bottom clearfix">
 
-                                                <el-button type="text" class="button">  <span style="font-size:24px;">名医馆</span></el-button>
+                                                <el-button type="text" @click="reload('myg.html')" class="button">  <span style="font-size:24px;">名医馆</span></el-button>
                                             </div>
                                         </div>
                                     </el-card>
@@ -142,7 +142,7 @@
                                            
                                             <div class="bottom clearfix">
 
-                                                <el-button type="text" class="button"> <span style="font-size:24px;">我的队报</span></el-button>
+                                                <el-button type="text" @click="reload('dlgb.html')" class="button"> <span style="font-size:24px;">我的队报</span></el-button>
                                             </div>
                                         </div>
                                     </el-card>
@@ -173,7 +173,7 @@
                                         <div class="list">
                                             <el-row :gutter="20">
                                                 <el-col :span="22">
-                                                    <a href="#">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
+                                                    <a href="info.html">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
                                                 </el-col>
                                                 <el-col :span="2">
                                                     4-25
@@ -181,7 +181,7 @@
                                             </el-row>
                                             <el-row :gutter="20">
                                                 <el-col :span="22">
-                                                    <a href="#">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
+                                                    <a href="info.html">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
                                                 </el-col>
                                                 <el-col :span="2">
                                                     4-25

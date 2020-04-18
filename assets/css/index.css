@@ -92,3 +92,13 @@ body>.el-container {
 .mst:hover{
     box-shadow: #afabab 4px 4px 4px 4px;
 }
+
+.info{
+    border: #eeeeee dashed 3px;
+    width: 1200px;
+    height: 600px;
+    background: #7356f5;
+    margin: auto;
+    color: #ffffff;
+    padding: 10px 20px;
+}

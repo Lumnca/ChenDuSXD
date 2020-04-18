@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户信息</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+
+        <el-container>
+            <el-header style="text-align: right;">
+                <div>
+                    <el-avatar :size="60" src="img/user.png"></el-avatar>
+                </div>
+            </el-header>
+            <el-container>
+                <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+
+                    <img src="img/lb.png" width="180">
+
+                    <el-menu :default-openeds="['1', '3']">
+                        <el-submenu index="1">
+                            <template slot="title"><i class="el-icon-message"></i>导航一</template>
+                            <el-menu-item-group>
+                                <el-menu-item index="1-1">选项1</el-menu-item>
+                                <el-menu-item index="1-2">选项2</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                        <el-submenu index="2">
+                            <template slot="title"><i class="el-icon-menu"></i>导航二</template>
+                            <el-menu-item-group>
+
+                                <el-menu-item index="2-1">选项1</el-menu-item>
+                                <el-menu-item index="2-2">选项2</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                        <el-submenu index="3">
+                            <template slot="title"><i class="el-icon-setting"></i>导航三</template>
+                            <el-menu-item-group>
+
+                                <el-menu-item index="3-1">选项1</el-menu-item>
+                                <el-menu-item index="3-2">选项2</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+
+                <el-main>
+                    <el-form ref="form" :model="form" label-width="80px" style="text-align:left;">
+                        <el-form-item label="真实姓名">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                        
+                        <el-form-item label="公开姓名">
+                            <el-select v-model="form.region" placeholder="请选择">
+                                <el-option label="是" value="shanghai"></el-option>
+                                <el-option label="否" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="出生年月">
+                            <el-col :span="11">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1"
+                                    style="width: 100%;"></el-date-picker>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item label="家长姓名">
+                                <el-input v-model="form.familyName"></el-input>
+                            </el-form-item>
+                            <el-form-item label="联系电话">
+                                    <el-input v-model="form.tel"></el-input>
+                                </el-form-item>
+                        <el-form-item label="简介">
+                            <el-input type="textarea" v-model="form.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="onSubmit">修改</el-button>
+                            <el-button>取消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-main>
+
+
+            </el-container>
+            <el-footer style="margin-top:80px;">
+                Copyright © 2020 Tencent. All Rights Reserved.
+                <br>
+                XXXX有限公司 版权所有
+            </el-footer>
+        </el-container>
+
+
+
+
+
+
+    </div>
+</body>
+<script src="js/index.js"></script>
+
+</html>

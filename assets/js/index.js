@@ -84,6 +84,48 @@ var app = new Vue({
         currentPage: 1,
         pages: 5,
         isLoginCheck : '未登录',
-        activeName : 'first'
-    }
+        activeName : 'first',
+        form: {
+            name: '周士林',
+            region: '是',
+            date1: '1999-02-12',
+            tel : '13280010211',
+            delivery: false,
+            type: [],
+            resource: '',
+            desc: '',
+            familyName : '周海鉴'
+          }
+    },
+    methods: {
+        reload(url){
+            window.location.href = url;
+        },
+        submitForm(formName){
+           
+            this.$refs[formName].validate((valid) => {
+
+                if (valid) {
+
+                   
+                                app.$message({
+                                    message: '登录成功!',
+                                    type: 'success'
+                                });
+
+                                app.user.id = app.loginForm.id;
+                                app.user.name = app.loginForm.id;
+                                app.islogin = true;
+                                app.centerDialogVisible = false;
+
+                        
+
+
+                } else {
+                    this.$message.error('验证错误！检查输入');
+                    return false;
+                }
+            });
+        }
+    },
 });
