@@ -75,7 +75,7 @@ var app = new Vue({
                 { validator: validateID, trigger: 'blur' }
             ]
         },
-        user: JSON.parse(window.localStorage.getItem('_user')) || { id: '', name: 'Lumnca' },
+        user: JSON.parse(gets("_user")) || { id: '', name: 'Lumnca' },
         form1: {
             isCost: '全部',
             type: []
@@ -83,49 +83,68 @@ var app = new Vue({
         colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
         currentPage: 1,
         pages: 5,
-        isLoginCheck : '未登录',
-        activeName : 'first',
+        activeName: 'first',
         form: {
             name: '周士林',
             region: '是',
             date1: '1999-02-12',
-            tel : '13280010211',
+            tel: '13280010211',
             delivery: false,
             type: [],
             resource: '',
             desc: '',
-            familyName : '周海鉴'
-          }
+            familyName: '周海鉴'
+        }
     },
     methods: {
-        reload(url){
+        reload(url) {
             window.location.href = url;
         },
-        submitForm(formName){
-           
+        submitForm(formName) {
+
             this.$refs[formName].validate((valid) => {
 
                 if (valid) {
-
-                   
-                                app.$message({
-                                    message: '登录成功!',
-                                    type: 'success'
-                                });
-
-                                app.user.id = app.loginForm.id;
-                                app.user.name = app.loginForm.id;
-                                app.islogin = true;
-                                app.centerDialogVisible = false;
-
-                        
-
-
+                    app.$message({
+                        message: '登录成功!',
+                        type: 'success'
+                    });
+                    app.user.id = app.loginForm.id;
+                    app.user.name = app.loginForm.id;
+                    app.islogin = true;
+                    app.centerDialogVisible = false;
+                    sets("_user",JSON.stringify(app.user))
                 } else {
                     this.$message.error('验证错误！检查输入');
                     return false;
                 }
             });
+        },
+        out() {
+            this.user = { id: '' }
+            window.localStorage.clear('_user');
+            this.islogin = false;
+            window.location.href = "index.html";
         }
     },
+    computed: {
+        isLoginCheck() {
+            if (this.user.id == '') {
+                this.islogin = false;
+                return '未登录'
+            }
+            else {
+                this.islogin = true;
+                return ''
+            }
+        },
+    },
 });
+
+function gets(key){
+    return window.localStorage.getItem(key);
+}
+
+function sets(key,value){
+    window.localStorage.setItem(key,value);
+}
