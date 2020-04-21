@@ -93,8 +93,20 @@ var app = new Vue({
             type: [],
             resource: '',
             desc: '',
-            familyName: '周海鉴'
-        }
+            familyName: ''
+        },
+        articles : [
+            {
+                title : '好时光',
+                state : 0,
+                date : '2019-06-24'
+            },
+            {
+                title : '好时光',
+                state : 0,
+                date : '2019-06-24'
+            },
+        ]
     },
     methods: {
         reload(url) {
@@ -125,7 +137,11 @@ var app = new Vue({
             window.localStorage.clear('_user');
             this.islogin = false;
             window.location.href = "index.html";
-        }
+        },
+        onSubmit(){
+
+        },
+
     },
     computed: {
         isLoginCheck() {
