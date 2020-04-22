@@ -99,13 +99,23 @@ var app = new Vue({
             {
                 title : '好时光',
                 state : 0,
-                date : '2019-06-24'
+                date : '2019-06-24',
+                er_info : '指定了人员信息'
             },
             {
                 title : '好时光',
                 state : 0,
-                date : '2019-06-24'
+                date : '2019-06-24',
+                er_info : '主题不符合'
             },
+        ],
+        article : {
+            title : '',
+            type : '',
+            content : ''
+        },
+        fileList: [
+            {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
         ]
     },
     methods: {
