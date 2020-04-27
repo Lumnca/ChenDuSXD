@@ -55,11 +55,11 @@
                             </el-dropdown>
                         </div>
                         <div v-else>
-                            <el-button type="text" @click="centerDialogVisible = true"><i
-                                    class="el-icon-user-solid"></i> {{isLoginCheck}} </el-button>
+                            <el-button type="text" @click="jactive = true"><i class="el-icon-user-solid"></i>
+                                {{isLoginCheck}} </el-button>
 
 
-                            <el-dialog title="登录" :visible.sync="centerDialogVisible" width="30%" center>
+                            <el-dialog title="登录" :visible.sync="jactive" width="30%" center>
 
                                 <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm"
                                     label-width="100px" class="demo-loginForm">
@@ -93,7 +93,80 @@
 
                 <el-container>
                     <el-main>
+                        <el-form :inline="true" :model="filter" class="demo-form-inline">
+                            <el-form-item label="关键字">
+                                <el-input v-model="filter.key" placeholder="输入关键字搜索"></el-input>
+                            </el-form-item>
+                            <el-form-item label="活动区域">
+                                <el-select v-model="filter.place" placeholder="活动区域">
+                                    <el-option label="锦江区" value="锦江区"></el-option>
+                                    <el-option label="青羊区" value="青羊区"></el-option>
+                                    <el-option label="金牛区" value="金牛区"></el-option>
+                                    <el-option label="武侯区" value="武侯区"></el-option>
+                                    <el-option label="成华区" value="成华区"></el-option>
+                                    <el-option label="龙泉驿" value="龙泉驿"></el-option>
+                                    <el-option label="青白江区" value="青白江区"></el-option>
+                                    <el-option label="新都区" value="新都区"></el-option>
+                                    <el-option label="温江区" value="温江区"></el-option>
+                                    <el-option label="双流区" value="双流区"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmitActive(filter)">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+                        <el-row :gutter="20">
+                            <el-col :span="2">
+                                <div class="grid-content bg-purple">&nbsp;</div>
+                            </el-col>
+                            <el-col :span="20" style="text-align: left">
+                                <el-row v-for="i in Math.ceil(actives.length/4)" style="margin-top:40px;">
+                                    <el-col :span="5" v-for="(o,r) in 4" :key="r" :offset="r > 0 ? 1 : 0"
+                                        v-if="actives[(i-1)*4+r]!=null&&actives[(i-1)*4+r].state!=0">
+                                        <div>
+                                            <el-card :body-style="{ padding: '0px' }">
+                                                <img src="img/sxd.jpg" class="image" width="120">
+                                                <div style="padding: 12px;">
+                                                    <el-button type="text" @click="joinActive(actives[(i-1)*4+r])"><h3>{{actives[(i-1)*4+r].name}}</h3></el-button>
+                                                    <div style="color: #bbbbbb;font-size: 12px;">
+                                                        <span>开始时间:{{actives[(i-1)*4+r].date}}</span>
+                                                    </div>
+                                                    <div style="color: #bbbbbb;font-size: 12px;">
+                                                        <span>{{actives[(i-1)*4+r].address}}</span>
+                                                    </div>
+                                                    <div><span
+                                                            style="color: #c44040;font-size: 14px;">{{actives[(i-1)*4+r].number}}
+                                                        </span>
+                                                        <span style="color: #bbbbbb;font-size: 12px;">人已报名</span>
+                                                    </div>
 
+                                                </div>
+                                            </el-card>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+
+                            <el-col :span="2">
+                                <div class="grid-content bg-purple">&nbsp;</div>
+                            </el-col>
+                        </el-row>
+
+
+                        <el-dialog :title="active.name" :visible.sync="jactive" width="30%" center>
+                            <div>
+                                <span style="color:#b2f3ba;font-size: 18px;"><span class="el-icon-time"></span> 开始报名时间:{{active.start_time}}</span><br><br>
+                                <span style="color:#df525e;font-size: 18px;"><span class="el-icon-time"></span> 截止报名时间:{{active.end_time}}</span><br><br>
+                                <span style="color:#70d4d8;font-size: 18px;"><span class="el-icon-time"></span> 活动开始时间:{{active.date}}</span><br><br>
+                                <span  style="color:#586262;font-size: 18px;"><span class="el-icon-location-outline"></span> 活动地址:{{active.address}}</span><br><br>
+                                
+                            </div>
+                            
+                            <span slot="footer" class="dialog-footer">
+                                <el-button @click="jactive = false">取 消</el-button>
+                                <el-button type="primary" @click="enroll(active)">报名</el-button>
+                            </span>
+                        </el-dialog>
                     </el-main>
                     <el-footer style="margin-top:80px;">
                         Copyright © 2020 Tencent. All Rights Reserved.
@@ -105,6 +178,8 @@
         </el-container>
     </div>
 </body>
-<script src="js/index.js"></script>
+<script src="js/index.js">
+
+</script>
 
 </html>

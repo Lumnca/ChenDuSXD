@@ -95,6 +95,7 @@ var app = new Vue({
             desc: '',
             familyName: ''
         },
+        jactive : false,
         articles : [
             {
                 title : '好时光',
@@ -116,6 +117,89 @@ var app = new Vue({
         },
         fileList: [
             {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+        ],
+        filter : {
+            key : '',
+            place : ''
+        },
+        actives : [
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都龙泉驿区XXX号'
+            },
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都锦江区XXX号'
+            },
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都武侯区XXX号'
+            },
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都青羊区XXX号'
+            }
+            ,
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都温江区XXX号'
+            }
+        ],
+        active : {
+            name : '',
+            start_time : '',
+            end_time : '',
+            date : '',
+            state : 0,
+            number : 0,
+            address : ''
+        },
+        active1 : [
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都温江区XXX号'
+            }
+        ],
+        active2 : [
+            {
+                name : '活动XXXXX',
+                start_time : '2017-09-12 14:00',
+                end_time : '2017-09-15 12:00',
+                date : '2017-09-20 10:00',
+                state : 1,
+                number : 37,
+                address : '成都青羊区XXX号'
+            }
         ]
     },
     methods: {
@@ -151,6 +235,50 @@ var app = new Vue({
         onSubmit(){
 
         },
+        onSubmitActive(filter){
+            this.actives.forEach(e => {
+               
+                    e.state = 1;
+                
+            });
+            if(filter.key!=''&&filter.place==''){
+                this.actives.forEach(e => {
+                    if(e.name.indexOf(filter.key)==-1&&e.address.indexOf(filter.key)==-1){
+                        e.state = 0;
+                    }
+                });
+            }
+            else if(filter.key==''&&filter.place!=''){
+                this.actives.forEach(e => {
+                    if(e.address.indexOf(filter.place)==-1){
+                        e.state = 0;
+                    }
+                });
+            }
+            else if(filter.key!=''&&filter.place!=''){
+                this.actives.forEach(e => {
+                    if(e.name.indexOf(filter.key)==-1&&e.address.indexOf(filter.place)==-1){
+                        e.state = 0;
+                    }
+                });
+            }
+            else{
+                this.actives.forEach(e => {
+                        e.state = 1;
+                });
+            }
+        } ,
+        joinActive(act){
+            this.active = act;
+            this.jactive = true;
+        },
+        enroll(active){
+            this.$message({
+                message: '报名成功！',
+                type: 'success'
+              });
+              this.jactive = false;
+        }
 
     },
     computed: {
