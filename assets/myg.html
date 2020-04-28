@@ -40,7 +40,7 @@
                     <el-col :span="1" style="float:right;">
                         <div class="grid-content bg-purple" v-if="islogin">
                             <el-dropdown>
-                                <el-avatar :size="60" src="https://empty">
+                                <el-avatar :size="60" src="img/user.png">
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
@@ -100,29 +100,29 @@
                                 .
                             </el-col>
                             <el-col :span="20">
-                                <div class="mst">
+                                <div class="mst"  v-for="a in articles" v-if="a.state==1&&a.sortid==1" @click="mst(a)">
                                     <el-row>
                                         <el-col :span="24">
                                             <el-card>
                                                 <el-row>
                                                     <el-col :span="6">
-                                                        <img src="img/lb.png" height="120">
+                                                        <img :src="'http://127.0.0.1:81/public/'+a.imgurl" height="120">
                                                     </el-col>
                                                     <el-col :span="18">
                                                         <div style="text-align:left;">
                                                             <el-tag>名医馆</el-tag>
-                                                            天亦是美网络给大家介绍一款可以在线激活win10、win8/8.1MS 神龙版。
+                                                             {{a.title}}
                                                         </div>
                                                         <div style="margin-top:48px;font-size:22px;">
                                                             <el-row>
                                                                 <el-col :span="4" style="color: #555555;">
-                                                                    成都少先队
+                                                                   {{a.source}}
                                                                 </el-col>
                                                                 <el-col :span="14">
                                                                     &nbsp;
                                                                 </el-col>
                                                                 <el-col :span="6" style="color: #555555;">
-                                                                    2019-12-24 24:43
+                                                                   {{a.publishtime}}
                                                                 </el-col>
                                                             </el-row>
                                                         </div>
@@ -132,37 +132,22 @@
                                         </el-col>
                                     </el-row>
                                 </div>
-                                <div class="mst">
-                                    <el-row>
-                                        <el-col :span="24">
-                                            <el-card>
-                                                <el-row>
-                                                    <el-col :span="6">
-                                                        <img src="img/lb.png" height="120">
-                                                    </el-col>
-                                                    <el-col :span="18">
-                                                        <div style="text-align:left;">
-                                                            <el-tag>名医馆</el-tag>
-                                                            天亦是美网络给大家介绍一款可以在线激活win10、win8/8.1MS 神龙版。
-                                                        </div>
-                                                        <div style="margin-top:48px;font-size:22px;">
-                                                            <el-row>
-                                                                <el-col :span="4" style="color: #555555;">
-                                                                    成都少先队
-                                                                </el-col>
-                                                                <el-col :span="14">
-                                                                    &nbsp;
-                                                                </el-col>
-                                                                <el-col :span="6" style="color: #555555;">
-                                                                    2019-12-24 24:43
-                                                                </el-col>
-                                                            </el-row>
-                                                        </div>
-                                                    </el-col>
-                                                </el-row>
-                                            </el-card>
+                                <div style="margin: 20px">
+                                    <el-row :gutter="20">
+                                        <el-col :span="4">
+                                            <div class="grid-content bg-purple">&nbsp;</div>
+                                        </el-col>
+                                        <el-col :span="16" style="text-align:center;">
+                                            <el-pagination @current-change="handleCurrentChange"
+                                                :current-page.sync="currentPage" background layout="prev, pager, next"
+                                                :page-size="20" :total="pages">
+                                            </el-pagination>
+                                        </el-col>
+                                        <el-col :span="4">
+                                            <div class="grid-content bg-purple">&nbsp;</div>
                                         </el-col>
                                     </el-row>
+        
                                 </div>
                             </el-col>
                             <el-col :span="2">
@@ -182,5 +167,5 @@
     </div>
 </body>
 <script src="js/index.js"></script>
-
+<script src="js/mst.js"></script>
 </html>

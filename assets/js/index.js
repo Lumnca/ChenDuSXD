@@ -95,112 +95,108 @@ var app = new Vue({
             desc: '',
             familyName: ''
         },
-        jactive : false,
-        articles : [
-            {
-                title : '好时光',
-                state : 0,
-                date : '2019-06-24',
-                er_info : '指定了人员信息'
-            },
-            {
-                title : '好时光',
-                state : 0,
-                date : '2019-06-24',
-                er_info : '主题不符合'
-            },
-        ],
-        article : {
+        form2: {
             title : '',
             type : '',
+            imgurl : '',
             content : ''
         },
+        jactive: false,
+        articles: [],
+        article: JSON.parse(gets('_mst')) || {},
+        userdata: {},
         fileList: [
-            {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+            { name: 'lb.png', url: 'http://127.0.0.1:81/public/lb.png' },
         ],
-        filter : {
-            key : '',
-            place : ''
+        filter: {
+            key: '',
+            place: ''
         },
-        actives : [
+        sh_articles : [],
+        tg_articles : [],
+        er_articles : [],
+        actives: [
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都龙泉驿区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都龙泉驿区XXX号'
             },
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都锦江区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都锦江区XXX号'
             },
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都武侯区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都武侯区XXX号'
             },
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都青羊区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都青羊区XXX号'
             }
             ,
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都温江区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都温江区XXX号'
             }
         ],
-        active : {
-            name : '',
-            start_time : '',
-            end_time : '',
-            date : '',
-            state : 0,
-            number : 0,
-            address : ''
+        active: {
+            name: '',
+            start_time: '',
+            end_time: '',
+            date: '',
+            state: 0,
+            number: 0,
+            address: ''
         },
-        active1 : [
+        active1: [
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都温江区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都温江区XXX号'
             }
         ],
-        active2 : [
+        active2: [
             {
-                name : '活动XXXXX',
-                start_time : '2017-09-12 14:00',
-                end_time : '2017-09-15 12:00',
-                date : '2017-09-20 10:00',
-                state : 1,
-                number : 37,
-                address : '成都青羊区XXX号'
+                name: '活动XXXXX',
+                start_time: '2017-09-12 14:00',
+                end_time: '2017-09-15 12:00',
+                date: '2017-09-20 10:00',
+                state: 1,
+                number: 37,
+                address: '成都青羊区XXX号'
             }
-        ]
+        ],
+        currentPage: 1,
+        pages: 4,
+        maxIndex : 0
     },
     methods: {
         reload(url) {
@@ -211,6 +207,8 @@ var app = new Vue({
             this.$refs[formName].validate((valid) => {
 
                 if (valid) {
+
+
                     app.$message({
                         message: '登录成功!',
                         type: 'success'
@@ -219,7 +217,7 @@ var app = new Vue({
                     app.user.name = app.loginForm.id;
                     app.islogin = true;
                     app.centerDialogVisible = false;
-                    sets("_user",JSON.stringify(app.user))
+                    sets("_user", JSON.stringify(app.user))
                 } else {
                     this.$message.error('验证错误！检查输入');
                     return false;
@@ -232,54 +230,128 @@ var app = new Vue({
             this.islogin = false;
             window.location.href = "index.html";
         },
-        onSubmit(){
-
+        onSubmit() {
+            let data = this.form;
+            data.uid = JSON.parse(gets('_user')).id;
+            axios.put('http://127.0.0.1:81/users/' + data.uid, data)
+                .then(function (response) {
+                    app.$message({
+                        message: '修改成功！',
+                        type: 'success'
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
-        onSubmitActive(filter){
+        onSubmitActive(filter) {
             this.actives.forEach(e => {
-               
-                    e.state = 1;
-                
+
+                e.state = 1;
+
             });
-            if(filter.key!=''&&filter.place==''){
+            if (filter.key != '' && filter.place == '') {
                 this.actives.forEach(e => {
-                    if(e.name.indexOf(filter.key)==-1&&e.address.indexOf(filter.key)==-1){
+                    if (e.name.indexOf(filter.key) == -1 && e.address.indexOf(filter.key) == -1) {
                         e.state = 0;
                     }
                 });
             }
-            else if(filter.key==''&&filter.place!=''){
+            else if (filter.key == '' && filter.place != '') {
                 this.actives.forEach(e => {
-                    if(e.address.indexOf(filter.place)==-1){
+                    if (e.address.indexOf(filter.place) == -1) {
                         e.state = 0;
                     }
                 });
             }
-            else if(filter.key!=''&&filter.place!=''){
+            else if (filter.key != '' && filter.place != '') {
                 this.actives.forEach(e => {
-                    if(e.name.indexOf(filter.key)==-1&&e.address.indexOf(filter.place)==-1){
+                    if (e.name.indexOf(filter.key) == -1 && e.address.indexOf(filter.place) == -1) {
                         e.state = 0;
                     }
                 });
             }
-            else{
+            else {
                 this.actives.forEach(e => {
-                        e.state = 1;
+                    e.state = 1;
                 });
             }
-        } ,
-        joinActive(act){
+        },
+        joinActive(act) {
             this.active = act;
             this.jactive = true;
         },
-        enroll(active){
+        enroll(active) {
             this.$message({
                 message: '报名成功！',
                 type: 'success'
-              });
-              this.jactive = false;
-        }
+            });
+            this.jactive = false;
+        },
+        handleCurrentChange(val) {
+            console.log(val);
+        },
+        mst(a) {
+            sets('_mst', JSON.stringify(a));
+            this.reload('show.html');
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        uploadFileSuccess(response, file, fileList) {
+            this.form2.imgurl = file.name;
+            app.$message({
+                message: '文件上传成功！',
+                type: 'success'
+            });
+        },
+        createArticle(data){
+            let article = {
+                aid : app.maxIndex,
+                sortid : 0,
+                title : data.title,
+                source : app.user.name,
+                createtime : dateFormat(new Date(),1),
+                publishtime : '',
+                state : 0,
+                content : data.content,
+                uid : app.user.uid,
+                imgurl : data.imgurl
+            };
+            axios.post('http://127.0.0.1:81/articles', article)
+            .then(function (response) {
+                app.$message({
+                    message: '上传成功，请等待审核！',
+                    type: 'success'
+                });
+                setTimeout(()=>{
+                    window.location.reload();
+                },2000);
+            })
+            .catch(function (error) {
+                app.$message.error('操作出错！');
+                console.log(error);
+            });
 
+        },
+        backArt(a){
+            a.state = -1;
+            a.content = '用户个人操作';
+            axios.put('http://127.0.0.1:81/articles/'+a.aid,a)
+            .then(function (response) {
+                app.$message({
+                    message: '撤回成功！',
+                    type: 'success'
+                });
+                setTimeout(()=>{
+                    window.location.reload();
+                },2000);
+            })
+            .catch(function (error) {
+                app.$message.error('操作出错！');
+                console.log(error);
+            });
+        }
     },
     computed: {
         isLoginCheck() {
@@ -295,10 +367,20 @@ var app = new Vue({
     },
 });
 
-function gets(key){
+function gets(key) {
     return window.localStorage.getItem(key);
 }
 
-function sets(key,value){
-    window.localStorage.setItem(key,value);
+function sets(key, value) {
+    window.localStorage.setItem(key, value);
+}
+
+
+function dateFormat(date, type) {
+    if (type == 1) {
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() +" "+ (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes());
+    }
+    else {
+        return (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + ":" + (date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
+    }
 }

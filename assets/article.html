@@ -55,8 +55,12 @@
                             <template slot="title"><i class="el-icon-bicycle"></i>活动</template>
                             <el-menu-item-group>
 
-                                <el-menu-item index="2-1">活动报名</el-menu-item>
-                                <el-menu-item index="2-2">我的活动</el-menu-item>
+                                <el-menu-item index="2-1">
+                                    <el-link :underline="false" href="active.html">活动报名</el-link>
+                                </el-menu-item>
+                                <el-menu-item index="2-2">
+                                    <el-link :underline="false" href="myactive.html">我的活动</el-link>
+                                </el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>
@@ -85,31 +89,31 @@
                     <el-tabs type="border-card">
                         <el-tab-pane label="投稿">
 
-                            <el-form ref="form" :model="form" label-width="80px">
+                            <el-form ref="form" :model="form2" label-width="80px">
                                 <el-form-item label="主题">
-                                    <el-input v-model="form.title"></el-input>
+                                    <el-input v-model="form2.title"></el-input>
                                 </el-form-item>
                                 <el-form-item label="类别">
-                                    <el-input v-model="form.type"></el-input>
+                                    <el-input v-model="form2.type"></el-input>
                                 </el-form-item>
 
-                               
+
 
                                 <el-form-item label="内容">
-                                    <el-input type="textarea" v-model="form.content"></el-input>
+                                    <el-input type="textarea" v-model="form2.content"></el-input>
                                 </el-form-item>
 
                                 <div style="width:400px;padding: 20px;">
-                                        <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-                                        :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
-                                        list-type="picture">
+                                    <el-upload class="upload-demo" action="http://127.0.0.1:81/upload"
+                                        :on-success="uploadFileSuccess" :on-remove="handleRemove" :file-list="fileList"
+                                        list-type="picture" name="uploadFile">
                                         <el-button size="small" type="primary">主题图片上传</el-button>
                                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                                     </el-upload>
                                 </div>
 
                                 <el-form-item>
-                                    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                                    <el-button type="primary" @click="createArticle(form2)">立即创建</el-button>
                                     <el-button>取消</el-button>
                                 </el-form-item>
                             </el-form>
@@ -118,8 +122,8 @@
 
                         </el-tab-pane>
                         <el-tab-pane label="审核中">
-                            <el-table :data="articles" height="250" border style="width: 100%">
-                                <el-table-column prop="date" label="日期" width="180">
+                            <el-table :data="sh_articles" height="250" border style="width: 100%">
+                                <el-table-column prop="createtime" label="日期" width="180">
                                 </el-table-column>
                                 <el-table-column prop="title" label="主题" width="180">
                                 </el-table-column>
@@ -132,14 +136,14 @@
                                     <template slot-scope="scope">
                                         <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
                                         </el-button>
-                                        <el-button type="danger" size="small">撤回</el-button>
+                                        <el-button type="danger" size="small" @click="backArt(scope.row)">撤回</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
                         <el-tab-pane label="已采用">
-                            <el-table :data="articles" height="250" border style="width: 100%">
-                                <el-table-column prop="date" label="日期" width="180">
+                            <el-table :data="tg_articles" height="250" border style="width: 100%">
+                                <el-table-column prop="createtime" label="日期" width="180">
                                 </el-table-column>
                                 <el-table-column prop="title" label="主题" width="180">
                                 </el-table-column>
@@ -152,30 +156,23 @@
                                     <template slot-scope="scope">
                                         <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
                                         </el-button>
-                                        <el-button type="danger" size="small">删除</el-button>
+                                        <el-button type="danger" @click="backArt(scope.row)" size="small">删除</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
-                        <el-tab-pane label="未采用">
-                            <el-table :data="articles" height="250" border style="width: 100%">
-                                <el-table-column prop="date" label="日期" width="180">
+                        <el-tab-pane label="不可用" >
+                            <el-table :data="er_articles" height="250" border style="width: 100%;color:#48b8cc;">
+                                <el-table-column prop="createtime" label="日期" width="180">
                                 </el-table-column>
                                 <el-table-column prop="title" label="主题" width="180">
                                 </el-table-column>
                                 <el-table-column label="状态">
                                     <div slot-scope="scope" style="color:#48b8cc;">
-                                        <el-tag type="danger">申请失败</el-tag>
+                                        <el-tag type="danger">不可用</el-tag>
                                     </div>
                                 </el-table-column>
-                                <el-table-column prop="er_info" label="描述" width="180">
-                                </el-table-column>
-                                <el-table-column fixed="right" label="操作" width="400">
-                                    <template slot-scope="scope">
-                                        <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
-                                        </el-button>
-                                        <el-button type="danger" size="small">删除</el-button>
-                                    </template>
+                                <el-table-column  prop="content" label="描述" width="180">
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
@@ -195,5 +192,6 @@
     </div>
 </body>
 <script src="js/index.js"></script>
+<script src="js/article.js"></script>
 
 </html>

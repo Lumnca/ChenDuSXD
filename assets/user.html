@@ -54,7 +54,7 @@
                             <el-menu-item-group>
 
                                 <el-menu-item index="2-1"> <el-link :underline="false" href="active.html">活动报名</el-link></el-menu-item>
-                                <el-menu-item index="2-2">我的活动</el-menu-item>
+                                <el-menu-item index="2-2"><el-link :underline="false" href="myactive.html">我的活动</el-link></el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>
@@ -77,25 +77,25 @@
                         </el-form-item>
 
                         <el-form-item label="公开姓名">
-                            <el-select v-model="form.region" placeholder="请选择">
-                                <el-option label="是" value="shanghai"></el-option>
-                                <el-option label="否" value="beijing"></el-option>
+                            <el-select v-model="form.ispublic" placeholder="请选择">
+                                <el-option label="是" :value="1"></el-option>
+                                <el-option label="否" :value="0"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="出生年月">
                             <el-col :span="11">
-                                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1"
+                                <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday"
                                     style="width: 100%;"></el-date-picker>
                             </el-col>
                         </el-form-item>
                         <el-form-item label="家长姓名">
-                            <el-input v-model="form.familyName"></el-input>
+                            <el-input v-model="form.parentname"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话">
-                            <el-input v-model="form.tel"></el-input>
+                            <el-input v-model="form.phonenum"></el-input>
                         </el-form-item>
                         <el-form-item label="简介">
-                            <el-input type="textarea" v-model="form.desc"></el-input>
+                            <el-input type="textarea" v-model="form.profile"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">修改</el-button>
@@ -121,5 +121,5 @@
     </div>
 </body>
 <script src="js/index.js"></script>
-
+<script src="js/user.js"></script>
 </html>

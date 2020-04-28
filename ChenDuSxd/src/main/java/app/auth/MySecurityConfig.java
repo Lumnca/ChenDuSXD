@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +44,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasRole("admin")
                 .antMatchers("/db/**")
                 .hasRole("dba")
-                .antMatchers("/user/**")
+                .antMatchers("/ue/**")
                 .hasRole("user")
                 .and()
                 .formLogin()
@@ -95,6 +97,24 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 out.flush();
                 out.close();
             }
-        }).permitAll().and().csrf().disable();  //必须含有
+        }).and()
+                .logout()
+                .logoutUrl("/logout")             //注销接口
+                .clearAuthentication(true)        //清除认证信息
+                .invalidateHttpSession(true)      //是否使Session失效
+                .addLogoutHandler(new LogoutHandler() {        //配置登出处理器
+                    @Override
+                    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
+
+                    }
+                }).logoutSuccessHandler(new LogoutSuccessHandler() {
+            @Override
+            //处理器
+            public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                //重定向，也可以进行其他操作
+                httpServletResponse.sendRedirect("index.html");
+            }
+        }).permitAll()
+                .and().csrf().disable();
     }
 }

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>投稿信息</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+
+        <el-container>
+            <el-header style="text-align: right;">
+                <div>
+                    <el-dropdown>
+                        <el-avatar :size="60" src="img/user.png"></el-avatar>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>{{user.name}}</el-dropdown-item>
+                            <el-dropdown-item>
+                                <el-button type="text" @click="reload('index.html')"><span><i
+                                            class="el-icon-suitcase"></i>返回主页</span></el-button>
+                            </el-dropdown-item>
+                            <el-dropdown-item>
+                                <el-button type="text" @click="out()"><span><i class="el-icon-back"></i>登出</span>
+                                </el-button>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+
+                </div>
+            </el-header>
+            <el-container>
+                <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+
+                    <img src="img/lb.png" width="180">
+
+                    <el-menu :default-openeds="['1', '3']">
+                        <el-submenu index="1">
+                            <template slot="title"><i class="el-icon-document-add"></i>投稿</template>
+                            <el-menu-item-group>
+                                <el-menu-item index="1-1">
+                                    <el-link :underline="false" href="article.html">投稿</el-link>
+                                </el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                        <el-submenu index="2">
+                            <template slot="title"><i class="el-icon-bicycle"></i>活动</template>
+                            <el-menu-item-group>
+
+                                <el-menu-item index="2-1">活动报名</el-menu-item>
+                                <el-menu-item index="2-2">我的活动</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                        <el-submenu index="3">
+                            <template slot="title"><i class="el-icon-notebook-2"></i>学习</template>
+                            <el-menu-item-group>
+
+                                <el-menu-item index="3-1">选项1</el-menu-item>
+                                <el-menu-item index="3-2">选项2</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                        <el-submenu index="4">
+                            <template slot="title"><i class="el-icon-chat-dot-round"></i>消息</template>
+                            <el-menu-item-group>
+
+                                <el-menu-item index="3-1">个人消息</el-menu-item>
+                                <el-menu-item index="3-2">站内消息</el-menu-item>
+                            </el-menu-item-group>
+
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+
+                <el-main>
+                    <el-tabs type="border-card">
+                        <el-tab-pane label="投稿">
+
+                            <el-form ref="form" :model="form" label-width="80px">
+                                <el-form-item label="主题">
+                                    <el-input v-model="form.title"></el-input>
+                                </el-form-item>
+                                <el-form-item label="类别">
+                                    <el-input v-model="form.type"></el-input>
+                                </el-form-item>
+
+                               
+
+                                <el-form-item label="内容">
+                                    <el-input type="textarea" v-model="form.content"></el-input>
+                                </el-form-item>
+
+                                <div style="width:400px;padding: 20px;">
+                                        <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
+                                        :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
+                                        list-type="picture">
+                                        <el-button size="small" type="primary">主题图片上传</el-button>
+                                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                    </el-upload>
+                                </div>
+
+                                <el-form-item>
+                                    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                                    <el-button>取消</el-button>
+                                </el-form-item>
+                            </el-form>
+
+
+
+                        </el-tab-pane>
+                        <el-tab-pane label="审核中">
+                            <el-table :data="articles" height="250" border style="width: 100%">
+                                <el-table-column prop="date" label="日期" width="180">
+                                </el-table-column>
+                                <el-table-column prop="title" label="主题" width="180">
+                                </el-table-column>
+                                <el-table-column label="状态">
+                                    <div slot-scope="scope" style="color:#48b8cc;">
+                                        <span class="el-icon-loading"></span>审核中
+                                    </div>
+                                </el-table-column>
+                                <el-table-column fixed="right" label="操作" width="400">
+                                    <template slot-scope="scope">
+                                        <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
+                                        </el-button>
+                                        <el-button type="danger" size="small">撤回</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="已采用">
+                            <el-table :data="articles" height="250" border style="width: 100%">
+                                <el-table-column prop="date" label="日期" width="180">
+                                </el-table-column>
+                                <el-table-column prop="title" label="主题" width="180">
+                                </el-table-column>
+                                <el-table-column label="状态">
+                                    <div slot-scope="scope" style="color:#48b8cc;">
+                                        <el-tag type="success">通过</el-tag>
+                                    </div>
+                                </el-table-column>
+                                <el-table-column fixed="right" label="操作" width="400">
+                                    <template slot-scope="scope">
+                                        <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
+                                        </el-button>
+                                        <el-button type="danger" size="small">删除</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="未采用">
+                            <el-table :data="articles" height="250" border style="width: 100%">
+                                <el-table-column prop="date" label="日期" width="180">
+                                </el-table-column>
+                                <el-table-column prop="title" label="主题" width="180">
+                                </el-table-column>
+                                <el-table-column label="状态">
+                                    <div slot-scope="scope" style="color:#48b8cc;">
+                                        <el-tag type="danger">申请失败</el-tag>
+                                    </div>
+                                </el-table-column>
+                                <el-table-column prop="er_info" label="描述" width="180">
+                                </el-table-column>
+                                <el-table-column fixed="right" label="操作" width="400">
+                                    <template slot-scope="scope">
+                                        <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
+                                        </el-button>
+                                        <el-button type="danger" size="small">删除</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+
+                    </el-tabs>
+                </el-main>
+
+
+            </el-container>
+            <el-footer style="margin-top:80px;">
+                Copyright © 2020 Tencent. All Rights Reserved.
+                <br>
+                XXXX有限公司 版权所有
+            </el-footer>
+        </el-container>
+
+    </div>
+</body>
+<script src="js/index.js"></script>
+
+</html>

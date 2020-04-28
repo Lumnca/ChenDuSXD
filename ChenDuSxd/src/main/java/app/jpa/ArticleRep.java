@@ -5,6 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
+@CrossOrigin
 @RepositoryRestResource(path = "articles")
 public interface ArticleRep extends JpaRepository<Article,Integer> {
 }
