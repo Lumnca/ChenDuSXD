@@ -10,6 +10,10 @@
     <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
 </head>
 
@@ -38,7 +42,7 @@
                     <el-col :span="1" style="float:right;">
                         <div class="grid-content bg-purple" v-if="islogin">
                             <el-dropdown>
-                                <el-avatar :size="60" src="https://empty">
+                                <el-avatar :size="60" src="img/user.png">
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
@@ -59,31 +63,21 @@
                                     class="el-icon-user-solid"></i> {{isLoginCheck}} </el-button>
 
 
-                            <el-dialog title="登录" :visible.sync="centerDialogVisible" width="30%" center>
-
-                                <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm"
-                                    label-width="100px" class="demo-loginForm">
-
-                                    <el-form-item label="账号" prop="id">
-                                        <el-input type="text" v-model="loginForm.id" autocomplete="off"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="密码" prop="pass">
-                                        <el-input type="password" v-model="loginForm.pass" autocomplete="off">
-                                        </el-input>
-                                    </el-form-item>
-
-
-
-                                    <el-form-item>
-                                        <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-                                        <el-button @click="resetForm('loginForm')">重置</el-button>
-
-                                        <span style="margin:16px 54px;font-size: 16px;"><a href="#">忘记密码?</a> | <a
-                                                href="#">注册账号</a></span>
-                                    </el-form-item>
-                                </el-form>
-
-                            </el-dialog>
+                                    <form action="/login" method="POST">
+                                        <div class="form-group">
+                                            <label for="email"><span class="el-icon-user"></span> 账户</label>
+                                            <input type="email" class="form-control" id="email" placeholder="Enter id" name="username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pwd"><span class="el-icon-help"></span> 密码</label>
+                                            <input type="password" class="form-control" id="pwd"
+                                                placeholder="Enter password" name="password">
+                                        </div>
+                                        <div class="form-check">
+                                           <a href="#">忘记密码？</a> | <a href="#">注册账号</a>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary"> &nbsp;登录&nbsp; </button>
+                                    </form>
                         </div>
                     </el-col>
                 </el-row>
@@ -112,7 +106,9 @@
                                 <el-menu-item index="2-1">
                                     <el-link :underline="false" href="active.html">活动报名</el-link>
                                 </el-menu-item>
-                                <el-menu-item index="2-2"><el-link :underline="false" href="myactive.html">我的活动</el-link></el-menu-item>
+                                <el-menu-item index="2-2">
+                                    <el-link :underline="false" href="myactive.html">我的活动</el-link>
+                                </el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>
@@ -135,14 +131,34 @@
                             <el-table :data="active1" height="250" border style="width: 100%">
                                 <el-table-column prop="date" label="日期" width="180">
                                 </el-table-column>
-                                <el-table-column prop="name" label="主题" width="180">
+                                <el-table-column prop="aname" label="主题" width="180">
                                 </el-table-column>
                                 <el-table-column label="状态">
                                     <div slot-scope="scope" style="color:#48b8cc;">
-                                        <span class="el-icon-loading"></span>审核中
+                                        <div v-if="scope.row.state==2">
+                                            <span class="el-icon-loading"></span> 等待活动方确认
+                                        </div>
+
+                                        <div v-else-if="scope.row.state==1">
+                                            <span class="el-icon-check"></span> 报名成功！请等待活动方联系
+                                        </div>
+                                        <div v-else-if="scope.row.state==3">
+                                            <span class="el-icon-close
+                                            "></span> 报名失败！人数超额
+                                        </div>
+                                        <div v-else-if="scope.row.state==4">
+                                            <span class="el-icon-close"></span> 报名失败！条件不符合
+                                        </div>
+                                        <div v-else>
+                                            <span class="el-icon-close"></span> 报名失败！其他原因
+                                        </div>
                                     </div>
                                 </el-table-column>
-                                <el-table-column fixed="right" label="操作" width="400">
+                                <el-table-column prop="name" label="参与人" width="180">
+                                </el-table-column>
+                                <el-table-column prop="telphone" label="参与人电话">
+                                </el-table-column>
+                                <el-table-column fixed="right" label="操作">
                                     <template slot-scope="scope">
                                         <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
                                         </el-button>
@@ -153,16 +169,23 @@
                         </el-tab-pane>
 
                         <el-tab-pane label="已参与活动">
-                            <el-table :data="active1" height="250" border style="width: 100%">
+                            <el-table :data="active2" height="250" border style="width: 100%">
                                 <el-table-column prop="date" label="日期" width="180">
                                 </el-table-column>
-                                <el-table-column prop="name" label="名称" width="180">
+                                <el-table-column prop="aname" label="名称" width="180">
+                                </el-table-column>
+                                <el-table-column prop="name" label="参与人" width="180">
+                                </el-table-column>
+                                <el-table-column prop="telphone" label="参与人电话">
                                 </el-table-column>
                                 <el-table-column label="状态">
                                     <div slot-scope="scope" style="color:#48b8cc;">
-                                        <el-tag type="success">通过</el-tag>
+                                        <el-tag v-if="scope.row.state==0" type="success">完成</el-tag>
+                                        <el-tag v-else-if="scope.row.state==-1" type="info">缺席</el-tag>
+                                        <el-tag v-else type="danger">未完成</el-tag>
                                     </div>
                                 </el-table-column>
+
                                 <el-table-column fixed="right" label="操作" width="400">
                                     <template slot-scope="scope">
                                         <el-button @click="handleClick(scope.row)" type="primary" size="small">查看
@@ -186,8 +209,7 @@
         </el-container>
     </div>
 </body>
-<script src="js/index.js">
-
-</script>
+<script src="js/index.js"></script>
+<script src="js/active.js"></script>
 
 </html>

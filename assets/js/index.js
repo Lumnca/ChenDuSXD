@@ -96,12 +96,13 @@ var app = new Vue({
             familyName: ''
         },
         form2: {
-            title : '',
-            type : '',
-            imgurl : '',
-            content : ''
+            title: '',
+            type: '',
+            imgurl: '',
+            content: ''
         },
         jactive: false,
+        jactive2: false,
         articles: [],
         article: JSON.parse(gets('_mst')) || {},
         userdata: {},
@@ -112,57 +113,10 @@ var app = new Vue({
             key: '',
             place: ''
         },
-        sh_articles : [],
-        tg_articles : [],
-        er_articles : [],
-        actives: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都龙泉驿区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都锦江区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都武侯区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都青羊区XXX号'
-            }
-            ,
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都温江区XXX号'
-            }
-        ],
+        sh_articles: [],
+        tg_articles: [],
+        er_articles: [],
+        actives: [],
         active: {
             name: '',
             start_time: '',
@@ -170,33 +124,15 @@ var app = new Vue({
             date: '',
             state: 0,
             number: 0,
-            address: ''
+            address: '',
+            pname: '',
+            telphone: ''
         },
-        active1: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都温江区XXX号'
-            }
-        ],
-        active2: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都青羊区XXX号'
-            }
-        ],
+        active1: [],
+        active2: [],
         currentPage: 1,
         pages: 4,
-        maxIndex : 0
+        maxIndex: 0
     },
     methods: {
         reload(url) {
@@ -228,7 +164,7 @@ var app = new Vue({
             this.user = { id: '' }
             window.localStorage.clear('_user');
             this.islogin = false;
-            window.location.href = "index.html";
+            window.location.href = "/logout";
         },
         onSubmit() {
             let data = this.form;
@@ -279,14 +215,32 @@ var app = new Vue({
         },
         joinActive(act) {
             this.active = act;
-            this.jactive = true;
+            this.jactive2 = true;
         },
         enroll(active) {
-            this.$message({
-                message: '报名成功！',
-                type: 'success'
-            });
-            this.jactive = false;
+            let e = {
+                aid: active.id,
+                uid: app.user.id,
+                state: 2,
+                date: dateFormat(new Date(), 1),
+                name: active.pname,
+                telphone: active.telphone,
+                aname: active.name
+            }
+
+            axios.post('http://127.0.0.1:81/enrollA', e)
+                .then(function (response) {
+                    app.$message({
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+            this.jactive2 = false;
         },
         handleCurrentChange(val) {
             console.log(val);
@@ -305,52 +259,52 @@ var app = new Vue({
                 type: 'success'
             });
         },
-        createArticle(data){
+        createArticle(data) {
             let article = {
-                aid : app.maxIndex,
-                sortid : 0,
-                title : data.title,
-                source : app.user.name,
-                createtime : dateFormat(new Date(),1),
-                publishtime : '',
-                state : 0,
-                content : data.content,
-                uid : app.user.uid,
-                imgurl : data.imgurl
+                aid: app.maxIndex,
+                sortid: 0,
+                title: data.title,
+                source: app.user.name,
+                createtime: dateFormat(new Date(), 1),
+                publishtime: '',
+                state: 0,
+                content: data.content,
+                uid: app.user.id,
+                imgurl: data.imgurl
             };
             axios.post('http://127.0.0.1:81/articles', article)
-            .then(function (response) {
-                app.$message({
-                    message: '上传成功，请等待审核！',
-                    type: 'success'
+                .then(function (response) {
+                    app.$message({
+                        message: '上传成功，请等待审核！',
+                        type: 'success'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                })
+                .catch(function (error) {
+                    app.$message.error('操作出错！');
+                    console.log(error);
                 });
-                setTimeout(()=>{
-                    window.location.reload();
-                },2000);
-            })
-            .catch(function (error) {
-                app.$message.error('操作出错！');
-                console.log(error);
-            });
 
         },
-        backArt(a){
+        backArt(a) {
             a.state = -1;
             a.content = '用户个人操作';
-            axios.put('http://127.0.0.1:81/articles/'+a.aid,a)
-            .then(function (response) {
-                app.$message({
-                    message: '撤回成功！',
-                    type: 'success'
+            axios.put('http://127.0.0.1:81/articles/' + a.aid, a)
+                .then(function (response) {
+                    app.$message({
+                        message: '撤回成功！',
+                        type: 'success'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                })
+                .catch(function (error) {
+                    app.$message.error('操作出错！');
+                    console.log(error);
                 });
-                setTimeout(()=>{
-                    window.location.reload();
-                },2000);
-            })
-            .catch(function (error) {
-                app.$message.error('操作出错！');
-                console.log(error);
-            });
         }
     },
     computed: {
@@ -378,9 +332,10 @@ function sets(key, value) {
 
 function dateFormat(date, type) {
     if (type == 1) {
-        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() +" "+ (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes());
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes());
     }
     else {
         return (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + ":" + (date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
     }
 }
+

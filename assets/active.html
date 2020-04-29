@@ -10,6 +10,10 @@
     <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
 </head>
 
@@ -61,27 +65,22 @@
 
                             <el-dialog title="登录" :visible.sync="jactive" width="30%" center>
 
-                                <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm"
-                                    label-width="100px" class="demo-loginForm">
-
-                                    <el-form-item label="账号" prop="id">
-                                        <el-input type="text" v-model="loginForm.id" autocomplete="off"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="密码" prop="pass">
-                                        <el-input type="password" v-model="loginForm.pass" autocomplete="off">
-                                        </el-input>
-                                    </el-form-item>
-
-
-
-                                    <el-form-item>
-                                        <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-                                        <el-button @click="resetForm('loginForm')">重置</el-button>
-
-                                        <span style="margin:16px 54px;font-size: 16px;"><a href="#">忘记密码?</a> | <a
-                                                href="#">注册账号</a></span>
-                                    </el-form-item>
-                                </el-form>
+                                <form action="/login" method="POST">
+                                    <div class="form-group">
+                                        <label for="email"><span class="el-icon-user"></span> 账户</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Enter id"
+                                            name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd"><span class="el-icon-help"></span> 密码</label>
+                                        <input type="password" class="form-control" id="pwd"
+                                            placeholder="Enter password" name="password">
+                                    </div>
+                                    <div class="form-check">
+                                        <a href="#">忘记密码？</a> | <a href="#">注册账号</a>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"> &nbsp;登录&nbsp; </button>
+                                </form>
 
                             </el-dialog>
                         </div>
@@ -127,7 +126,9 @@
                                             <el-card :body-style="{ padding: '0px' }">
                                                 <img src="img/sxd.jpg" class="image" width="120">
                                                 <div style="padding: 12px;">
-                                                    <el-button type="text" @click="joinActive(actives[(i-1)*4+r])"><h3>{{actives[(i-1)*4+r].name}}</h3></el-button>
+                                                    <el-button type="text" @click="joinActive(actives[(i-1)*4+r])">
+                                                        <h3>{{actives[(i-1)*4+r].name}}</h3>
+                                                    </el-button>
                                                     <div style="color: #bbbbbb;font-size: 12px;">
                                                         <span>开始时间:{{actives[(i-1)*4+r].date}}</span>
                                                     </div>
@@ -153,17 +154,36 @@
                         </el-row>
 
 
-                        <el-dialog :title="active.name" :visible.sync="jactive" width="30%" center>
+                        <el-dialog :title="active.name" :visible.sync="jactive2" width="30%" center>
                             <div>
-                                <span style="color:#b2f3ba;font-size: 18px;"><span class="el-icon-time"></span> 开始报名时间:{{active.start_time}}</span><br><br>
-                                <span style="color:#df525e;font-size: 18px;"><span class="el-icon-time"></span> 截止报名时间:{{active.end_time}}</span><br><br>
-                                <span style="color:#70d4d8;font-size: 18px;"><span class="el-icon-time"></span> 活动开始时间:{{active.date}}</span><br><br>
-                                <span  style="color:#586262;font-size: 18px;"><span class="el-icon-location-outline"></span> 活动地址:{{active.address}}</span><br><br>
-                                
+                                <span style="color:#b2f3ba;font-size: 18px;"><span class="el-icon-time"></span>
+                                    开始报名时间:{{active.start_time}}</span><br><br>
+                                <span style="color:#df525e;font-size: 18px;"><span class="el-icon-time"></span>
+                                    截止报名时间:{{active.end_time}}</span><br><br>
+                                <span style="color:#70d4d8;font-size: 18px;"><span class="el-icon-time"></span>
+                                    活动开始时间:{{active.date}}</span><br><br>
+                                <span style="color:#586262;font-size: 18px;"><span
+                                        class="el-icon-location-outline"></span> 活动地址:{{active.address}}</span><br><br>
+                                <br>
+                                <span style="color:#56be8e;font-size: 18px;">
+                                    <span class="el-icon-chat-dot-square"></span> 简介:{{active.info}}
+                                </span>
                             </div>
-                            
+                            <br>
+                            <div>
+                                <el-form ref="active" :model="active" label-width="80px">
+                                    <el-form-item label="姓名">
+                                        <el-input v-model="active.name"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="电话号码">
+                                        <el-input v-model="active.telphone"></el-input>
+                                    </el-form-item>
+                                </el-form>
+
+                            </div>
+                            <br>
                             <span slot="footer" class="dialog-footer">
-                                <el-button @click="jactive = false">取 消</el-button>
+                                <el-button @click="jactive2 = false">取 消</el-button>
                                 <el-button type="primary" @click="enroll(active)">报名</el-button>
                             </span>
                         </el-dialog>
@@ -178,8 +198,7 @@
         </el-container>
     </div>
 </body>
-<script src="js/index.js">
-
-</script>
+<script src="js/index.js"></script>
+<script src="js/active.js"></script>
 
 </html>
