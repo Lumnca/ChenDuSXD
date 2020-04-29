@@ -1,49 +1,4 @@
-var checkAge = (rule, value, callback) => {
-    if (!value) {
-        return callback(new Error('年龄不能为空'));
-    }
-    setTimeout(() => {
-        if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-        } else {
-            if (value < 18) {
-                callback(new Error('必须年满18岁'));
-            } else {
-                callback();
-            }
-        }
-    }, 1000);
-};
-var validateID = (rule, value, callback) => {
-    if (value === '') {
-        callback(new Error('请输入账号'));
-    } else {
-        if (app.loginForm.id.indexOf("'") != -1 || app.loginForm.id.indexOf("(") != -1 || app.loginForm.id.indexOf(")") != -1) {
-            console.log(app.loginForm.id);
-            callback(new Error('非法字符'));
-        }
-        else {
-            callback();
-        }
 
-    }
-};
-var validatePass = (rule, value, callback) => {
-    if (value === '') {
-        callback(new Error('请输入密码'));
-    } else {
-        callback();
-    }
-};
-var validatePass2 = (rule, value, callback) => {
-    if (value === '') {
-        callback(new Error('请再次输入密码'));
-    } else if (value !== this.loginForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
-    } else {
-        callback();
-    }
-};
 var app = new Vue({
     el: '#app',
     data: {
@@ -61,18 +16,25 @@ var app = new Vue({
             number: 0,
             result: -1
         },
+        ruleForm: {
+            password: '',
+            checkPass: '',
+            tel: '',
+            username:''
+        },
         rules: {
-            pass: [
-                { validator: validatePass, trigger: 'blur' }
+            username: [
+                { required: true, message: '请输入账户名称！', trigger: 'blur' },
+                { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
+            ],
+            password: [
+                {  required: true, message: '输入密码', trigger: 'blur' }
             ],
             checkPass: [
-                { validator: validatePass2, trigger: 'blur' }
+                {  required: true, message: '请再次输入密码', trigger: 'blur' }
             ],
-            age: [
-                { validator: checkAge, trigger: 'blur' }
-            ],
-            id: [
-                { validator: validateID, trigger: 'blur' }
+            tel: [
+                { type: 'number', required: true, message: '请输入数值', trigger: 'change' }
             ]
         },
         user: JSON.parse(gets("_user")) || { id: '', name: 'Lumnca' },
@@ -95,65 +57,28 @@ var app = new Vue({
             desc: '',
             familyName: ''
         },
+        form2: {
+            title: '',
+            type: '',
+            imgurl: '',
+            content: ''
+        },
         jactive: false,
+        jactive2: false,
         articles: [],
         article: JSON.parse(gets('_mst')) || {},
         userdata: {},
         fileList: [
-            { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
+            { name: 'lb.png', url: 'http://127.0.0.1:81/public/lb.png' },
         ],
         filter: {
             key: '',
             place: ''
         },
-        actives: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都龙泉驿区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都锦江区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都武侯区XXX号'
-            },
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都青羊区XXX号'
-            }
-            ,
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都温江区XXX号'
-            }
-        ],
+        sh_articles: [],
+        tg_articles: [],
+        er_articles: [],
+        actives: [],
         active: {
             name: '',
             start_time: '',
@@ -161,71 +86,72 @@ var app = new Vue({
             date: '',
             state: 0,
             number: 0,
-            address: ''
+            address: '',
+            pname: '',
+            telphone: ''
         },
-        active1: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都温江区XXX号'
-            }
-        ],
-        active2: [
-            {
-                name: '活动XXXXX',
-                start_time: '2017-09-12 14:00',
-                end_time: '2017-09-15 12:00',
-                date: '2017-09-20 10:00',
-                state: 1,
-                number: 37,
-                address: '成都青羊区XXX号'
-            }
-        ],
+        active1: [],
+        active2: [],
         currentPage: 1,
-        pages: 4
+        pages: 4,
+        maxIndex: 0
     },
     methods: {
         reload(url) {
             window.location.href = url;
         },
         submitForm(formName) {
-
             this.$refs[formName].validate((valid) => {
+                    if (valid&&app.ruleForm.password==app.ruleForm.checkPass) {
 
-                if (valid) {
+                        var user = {
+                            _id : 0,
+                            _username : app.ruleForm.username,
+                            _password : app.ruleForm.password,
+                            _enabled : 1,
+                            _locked : 0
+                        }
+                     axios.post('http://127.0.0.1:81/adduser',user)
+                    .then(function (response) {
+                        app.$message({
+                            message: response.data.message + " 2s后跳转",
+                            type: 'success'
+                        });
+                        setTimeout(function () {
+                                window.location.href = "index.html";
+                        },2000)
+                    })
+                         .catch(function (error) {
+                             app.$message.error('操作失败！');
+                             console.log(error);
+                         });
 
 
-                    app.$message({
-                        message: '登录成功!',
-                        type: 'success'
-                    });
-                    app.user.id = app.loginForm.id;
-                    app.user.name = app.loginForm.id;
-                    app.islogin = true;
-                    app.centerDialogVisible = false;
-                    sets("_user", JSON.stringify(app.user))
-                } else {
-                    this.$message.error('验证错误！检查输入');
-                    return false;
-                }
+                    } else {
+                        console.log('error submit!!');
+                        app.$message.error('验证错误！请检查输入');
+                        return false;
+                    }
             });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
         out() {
             this.user = { id: '' }
             window.localStorage.clear('_user');
             this.islogin = false;
-            window.location.href = "index.html";
+            window.location.href = "/logout";
         },
         onSubmit() {
             let data = this.form;
             data.uid = JSON.parse(gets('_user')).id;
-            axios.put('http://127.0.0.1:81/users/' + data.uid,data)
+            axios.put('http://127.0.0.1:81/users/' + data.uid, data)
                 .then(function (response) {
-                    app.form = response.data;
+                    app.$message({
+                        message: '修改成功！',
+                        type: 'success'
+                    });
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -266,14 +192,32 @@ var app = new Vue({
         },
         joinActive(act) {
             this.active = act;
-            this.jactive = true;
+            this.jactive2 = true;
         },
         enroll(active) {
-            this.$message({
-                message: '报名成功！',
-                type: 'success'
-            });
-            this.jactive = false;
+            let e = {
+                aid: active.id,
+                uid: app.user.id,
+                state: 2,
+                date: dateFormat(new Date(), 1),
+                name: active.pname,
+                telphone: active.telphone,
+                aname: active.name
+            }
+
+            axios.post('http://127.0.0.1:81/enrollA', e)
+                .then(function (response) {
+                    app.$message({
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+            this.jactive2 = false;
         },
         handleCurrentChange(val) {
             console.log(val);
@@ -281,6 +225,63 @@ var app = new Vue({
         mst(a) {
             sets('_mst', JSON.stringify(a));
             this.reload('show.html');
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        uploadFileSuccess(response, file, fileList) {
+            this.form2.imgurl = file.name;
+            app.$message({
+                message: '文件上传成功！',
+                type: 'success'
+            });
+        },
+        createArticle(data) {
+            let article = {
+                aid: app.maxIndex,
+                sortid: 0,
+                title: data.title,
+                source: app.user.name,
+                createtime: dateFormat(new Date(), 1),
+                publishtime: '',
+                state: 0,
+                content: data.content,
+                uid: app.user.id,
+                imgurl: data.imgurl
+            };
+            axios.post('http://127.0.0.1:81/articles', article)
+                .then(function (response) {
+                    app.$message({
+                        message: '上传成功，请等待审核！',
+                        type: 'success'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                })
+                .catch(function (error) {
+                    app.$message.error('操作出错！');
+                    console.log(error);
+                });
+
+        },
+        backArt(a) {
+            a.state = -1;
+            a.content = '用户个人操作';
+            axios.put('http://127.0.0.1:81/articles/' + a.aid, a)
+                .then(function (response) {
+                    app.$message({
+                        message: '撤回成功！',
+                        type: 'success'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                })
+                .catch(function (error) {
+                    app.$message.error('操作出错！');
+                    console.log(error);
+                });
         }
     },
     computed: {
@@ -304,3 +305,14 @@ function gets(key) {
 function sets(key, value) {
     window.localStorage.setItem(key, value);
 }
+
+
+function dateFormat(date, type) {
+    if (type == 1) {
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes());
+    }
+    else {
+        return (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + ":" + (date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
+    }
+}
+

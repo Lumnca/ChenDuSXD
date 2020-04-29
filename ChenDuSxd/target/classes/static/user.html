@@ -22,7 +22,7 @@
                     <el-dropdown>
                         <el-avatar :size="60" src="img/user.png"></el-avatar>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>{{user.name}}</el-dropdown-item>
+                            <el-dropdown-item>{{user.username}}</el-dropdown-item>
                             <el-dropdown-item>
                                 <el-button type="text" @click="reload('index.html')"><span><i
                                             class="el-icon-suitcase"></i>返回主页</span></el-button>
@@ -54,7 +54,7 @@
                             <el-menu-item-group>
 
                                 <el-menu-item index="2-1"> <el-link :underline="false" href="active.html">活动报名</el-link></el-menu-item>
-                                <el-menu-item index="2-2">我的活动</el-menu-item>
+                                <el-menu-item index="2-2"><el-link :underline="false" href="myactive.html">我的活动</el-link></el-menu-item>
                             </el-menu-item-group>
 
                         </el-submenu>

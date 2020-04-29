@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer uid;
     private String name;
     private String birthday;
@@ -19,7 +18,12 @@ public class Users implements Serializable {
     private String parentname;
     private Integer ispublic;
     private String profile;
+    public Users(){
 
+    }
+    public Users(Integer uid){
+        this.uid = uid;
+    }
     public Integer getUid() {
         return uid;
     }

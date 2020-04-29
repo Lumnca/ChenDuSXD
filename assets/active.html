@@ -46,7 +46,7 @@
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>{{user.name}}</el-dropdown-item>
+                                    <el-dropdown-item>{{user.username}}</el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-button type="text" @click="reload('user.html')"><span><i
                                                     class="el-icon-suitcase"></i>用户中心</span></el-button>
@@ -65,22 +65,21 @@
 
                             <el-dialog title="登录" :visible.sync="jactive" width="30%" center>
 
-                                <form action="/login" method="POST">
-                                    <div class="form-group">
-                                        <label for="email"><span class="el-icon-user"></span> 账户</label>
-                                        <input type="email" class="form-control" id="email" placeholder="Enter id"
-                                            name="username">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pwd"><span class="el-icon-help"></span> 密码</label>
-                                        <input type="password" class="form-control" id="pwd"
-                                            placeholder="Enter password" name="password">
-                                    </div>
-                                    <div class="form-check">
-                                        <a href="#">忘记密码？</a> | <a href="#">注册账号</a>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary"> &nbsp;登录&nbsp; </button>
-                                </form>
+                                    <form action="/login" method="POST">
+                                        <div class="form-group">
+                                            <label for="id"><span class="el-icon-user"></span> 账户</label>
+                                            <input type="text" class="form-control" id="id" placeholder="Enter id" name="username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pwd"><span class="el-icon-help"></span> 密码</label>
+                                            <input type="password" class="form-control" id="pwd"
+                                                placeholder="Enter password" name="password">
+                                        </div>
+                                        <div class="form-check">
+                                           <a href="#">忘记密码？</a> | <a href="register.html">注册账号</a>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary"> &nbsp;登录&nbsp; </button>
+                                    </form>
 
                             </el-dialog>
                         </div>
@@ -179,7 +178,6 @@
                                         <el-input v-model="active.telphone"></el-input>
                                     </el-form-item>
                                 </el-form>
-
                             </div>
                             <br>
                             <span slot="footer" class="dialog-footer">

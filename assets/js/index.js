@@ -1,3 +1,6 @@
+var host = "http://127.0.0.1:81"; 
+
+
 var checkAge = (rule, value, callback) => {
     if (!value) {
         return callback(new Error('年龄不能为空'));
@@ -107,7 +110,7 @@ var app = new Vue({
         article: JSON.parse(gets('_mst')) || {},
         userdata: {},
         fileList: [
-            { name: 'lb.png', url: 'http://127.0.0.1:81/public/lb.png' },
+            { name: 'lb.png', url: host+ '/public/lb.png' },
         ],
         filter: {
             key: '',
@@ -169,7 +172,7 @@ var app = new Vue({
         onSubmit() {
             let data = this.form;
             data.uid = JSON.parse(gets('_user')).id;
-            axios.put('http://127.0.0.1:81/users/' + data.uid, data)
+            axios.put(host+ '/users/' + data.uid, data)
                 .then(function (response) {
                     app.$message({
                         message: '修改成功！',
@@ -228,7 +231,7 @@ var app = new Vue({
                 aname: active.name
             }
 
-            axios.post('http://127.0.0.1:81/enrollA', e)
+            axios.post(host+'/enrollA', e)
                 .then(function (response) {
                     app.$message({
                         message: response.data.message,
@@ -272,7 +275,7 @@ var app = new Vue({
                 uid: app.user.id,
                 imgurl: data.imgurl
             };
-            axios.post('http://127.0.0.1:81/articles', article)
+            axios.post(host+'/articles', article)
                 .then(function (response) {
                     app.$message({
                         message: '上传成功，请等待审核！',
@@ -291,7 +294,7 @@ var app = new Vue({
         backArt(a) {
             a.state = -1;
             a.content = '用户个人操作';
-            axios.put('http://127.0.0.1:81/articles/' + a.aid, a)
+            axios.put(host+'/articles/' + a.aid, a)
                 .then(function (response) {
                     app.$message({
                         message: '撤回成功！',

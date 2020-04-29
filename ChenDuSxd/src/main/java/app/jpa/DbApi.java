@@ -1,10 +1,8 @@
 package app.jpa;
 
+import app.reponse.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,17 +13,49 @@ public class DbApi {
     DbMapper dbMapper;
     @CrossOrigin
     @GetMapping("/tg_article/{id}")
-    public List<Article> getTGArticle(@PathVariable String id){
+    public List<Article> getTGArticle(@PathVariable Integer id){
         return dbMapper.getArtivle1(id);
     }
     @CrossOrigin
     @GetMapping("/er_article/{id}")
-    public List<Article> getERArticle(@PathVariable String id){
+    public List<Article> getERArticle(@PathVariable Integer id){
         return dbMapper.getArtivle3(id);
     }
     @CrossOrigin
     @GetMapping("/sh_article/{id}")
-    public List<Article> getTSHArticle(@PathVariable String id){
+    public List<Article> getTSHArticle(@PathVariable Integer id){
         return dbMapper.getArtivle2(id);
+    }
+    @CrossOrigin
+    @GetMapping("/active")
+    public List<Active> getActive(){
+        return dbMapper.getActive();
+    }
+    @CrossOrigin
+    @PostMapping("/enrollA")
+    public Response enrollActive(@RequestBody Enroll enroll){
+        Response response = new Response(0,"");
+
+        if(dbMapper.enrollActive(enroll)!=0){
+            response.setCode(200);
+            response.setMessage("添加数据成功！");
+        }
+        else{
+            response.setCode(400);
+            response.setMessage("添加数据失败！");
+        }
+        return  response;
+    }
+
+    @CrossOrigin
+    @GetMapping("/enrollM/{id}")
+    public List<Enroll> myEnrollActive(@PathVariable Integer id){
+        return dbMapper.getMyActive(id);
+    }
+
+    @CrossOrigin
+    @GetMapping("/user/{id}")
+    public Users getUserData(@PathVariable Integer id){
+        return dbMapper.getUserData(id);
     }
 }

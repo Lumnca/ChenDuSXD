@@ -10,7 +10,7 @@ import java.util.List;
 
 public class User  implements UserDetails {
     private Integer _id;
-    private String _name;
+    private String _username;
     private String _password;
     private Boolean _enabled;
     private Boolean _locked;
@@ -22,6 +22,22 @@ public class User  implements UserDetails {
 
     public void set_id(Integer _id) {
         this._id = _id;
+    }
+
+    public String get_username() {
+        return _username;
+    }
+
+    public void set_username(String _username) {
+        this._username = _username;
+    }
+
+    public String get_password() {
+        return _password;
+    }
+
+    public void set_password(String _password) {
+        this._password = _password;
     }
 
     public Boolean get_enabled() {
@@ -48,24 +64,6 @@ public class User  implements UserDetails {
         this._roles = _roles;
     }
 
-    public String get_name() {
-        return _name;
-    }
-
-    public void set_name(String _name) {
-        this._name = _name;
-    }
-
-    public String get_password() {
-        return _password;
-    }
-
-    public void set_password(String _password) {
-        this._password = _password;
-    }
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -83,8 +81,9 @@ public class User  implements UserDetails {
 
     @Override
     public String getUsername() {
-        return _name;
+        return _username;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

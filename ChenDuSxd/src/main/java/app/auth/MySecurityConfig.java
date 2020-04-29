@@ -1,5 +1,6 @@
 package app.auth;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,10 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -44,7 +47,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasRole("admin")
                 .antMatchers("/db/**")
                 .hasRole("dba")
-                .antMatchers("/ue/**")
+                .antMatchers("/user/**")
                 .hasRole("user")
                 .and()
                 .formLogin()
@@ -54,22 +57,17 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
                             , Authentication auth)throws IOException {
                         Object principal = auth.getPrincipal();
-                        response.setContentType("application/json;charset=utf-8");
+                        response.setContentType("text/html");
+                        response.setCharacterEncoding("UTF-8");
                         PrintWriter out = response.getWriter();
-                        response.setStatus(200);
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("status",200);
-                        map.put("msg",principal);
-                        ObjectMapper om = new ObjectMapper();
-                        out.write(om.writeValueAsString(map));
-                        out.flush();
-                        out.close();
+                        out.print("<script type='text/javascript'>alert('登录成功！');  window.localStorage.setItem('_user','"+JSONObject.toJSONString(principal) +"');  window.location.href='index.html';</script>");
+
                     }
                     //登录失败处理
                 }).failureHandler(new AuthenticationFailureHandler(){
             @Override
             public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-                response.setContentType("application/json;charset=utf-8");
+                response.setContentType("text/html;charset=utf-8");
                 PrintWriter out = response.getWriter();
                 response.setStatus(401);
                 Map<String,Object> map = new HashMap<>();
@@ -92,10 +90,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 else {
                     map.put("msg","未知错误，登录失败，请联系管理人员");
                 }
-                ObjectMapper om = new ObjectMapper();
-                out.write(om.writeValueAsString(map));
-                out.flush();
-                out.close();
+
+                out.print("<script type='text/javascript'>alert('"+JSONObject.toJSONString(map)+"');window.location.href='index.html';</script>");
             }
         }).and()
                 .logout()
