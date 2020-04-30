@@ -5,7 +5,7 @@ var eu = [
         icon: 'el-icon-tickets',
         menu : [
             {index : '1-1',title : '登录日志',herf : 'loginlog.html'},
-            {index : '1-2',title : '操作日志',herf : 'loginlog.html'}
+            {index : '1-2',title : '操作日志',herf : 'operlog.html'}
         ]
     },
     {
@@ -25,4 +25,23 @@ var eu = [
             {index : '3-1',title : '网站设置',herf : 'loginlog.html'},
         ]
     }
-]
+];
+
+
+
+var app = new Vue({
+    el: '#app',
+    data: {
+        LF : returnCitySN,
+        menu : eu,
+        logins : [
+            {id:1,date:'2020-5-8 14:12:35',username:'admin',ip:'127.0.0.1',address:'四川成都'},
+            {id:2,date:'2020-5-8 17:21:21',username:'admin',ip:'127.0.0.1',address:'四川成都'},
+            {id:3,date:'2020-5-9 19:08:12',username:'admin',ip:'127.0.0.1',address:'四川成都'},
+        ],
+        opes :[
+            {id:1,date:'2020-5-9 19:08:12',username:'admin',method:'添加数据',info:'添加了一条用户指令！'},
+            {id:2,date:'2020-5-9 19:08:12',username:'admin',method:'添加数据',info:'添加了一条用户指令！'},
+        ]
+    }
+})

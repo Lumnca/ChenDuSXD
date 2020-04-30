@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/element-ui@2.13.1/lib/index.js"></script>
     <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <title>登录日志</title>
+    <title>操作日志</title>
     <style>
         @import url("https://unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
 
@@ -62,29 +62,29 @@
 
                 <el-main>
                     <div>
-                        <el-table :data="logins" border style="width: 100%">
+                        <el-table :data="opes" border style="width: 100%">
                             <el-table-column prop="date" label="日期" width="280">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
-                                    <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                                    <span style="margin-left: 10px;color: #173db9;">{{ scope.row.date }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="username" label="用户" width="280">
                                 <template slot-scope="scope">
                                     <i class="el-icon-user"></i>
-                                    <span style="margin-left: 10px">{{ scope.row.username }}</span>
+                                    <span style="margin-left: 10px;color: #909069;">{{ scope.row.username }}</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="ip" label="ip地址">
+                            <el-table-column prop="method" label="操作">
                                 <template slot-scope="scope">
-                                    <i class="el-icon-monitor"></i>
-                                    <span style="margin-left: 10px">{{ scope.row.ip}}</span>
+                                    <i class="el-icon-s-marketing"></i>
+                                    <span style="margin-left: 10px;color: #e93f55;">{{ scope.row.method}}</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="address" label="登录地点">
+                            <el-table-column prop="info" label="描述">
                                 <template slot-scope="scope">
-                                    <i class="el-icon-place"></i>
-                                    <span style="margin-left: 10px">{{ scope.row.address }}</span>
+                                    <i class="el-icon-edit-outline"></i>
+                                    <span style="margin-left: 10px;color: #86bcee;">{{ scope.row.info }}</span>
                                 </template>
                             </el-table-column>
                         </el-table>
