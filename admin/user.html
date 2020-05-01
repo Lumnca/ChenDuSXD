@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.1/lib/index.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>用户管理</title>
+    <style>
+        @import url("https://unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
+
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            color: #333;
+        }
+
+        .el-footer {
+            background-color: #444444;
+            color: #eeeeee;
+            text-align: center;
+            padding: 80px 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <el-container style="height: 1000px; border: 1px solid #eee">
+            <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+                <el-menu :default-openeds="['1', '3']">
+                    <el-submenu v-for="e in menu" :index="e.index">
+                        <template slot="title"><i :class="e.icon"></i>{{e.title}}</template>
+                        <el-menu-item-group>
+                            <el-menu-item v-for="m in e.menu" :index="m.index">
+                                <el-link :underline="false" :href="m.herf">{{m.title}} </el-link>
+                            </el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+
+            <el-container>
+                <el-header style="text-align: right; font-size: 12px">
+                    <el-dropdown>
+                        <i class="el-icon-setting" style="margin-right: 15px"></i>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i>退出</span></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <span>Admin</span>
+                </el-header>
+
+                <el-main>
+                    <div>
+                        <el-table :data="users" border style="width: 100%">
+
+                            <el-table-column prop="username" label="用户名" width="280">
+                                <template slot-scope="scope">
+                                    <i class="el-icon-user"></i>
+                                    <span style="margin-left: 10px;color: #909069;">{{ scope.row.username }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="role" label="角色">
+                                <template slot-scope="scope">
+                                    <i class="el-icon-bank-card"></i>
+                                    <span style="margin-left: 10px;color: #e93f55;">{{ scope.row.role}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="auth" label="权限">
+                                <template slot-scope="scope">
+                                    <i class="el-icon-edit-outline"></i>
+                                    <span style="margin-left: 10px;color: #86bcee;">{{ scope.row.auth }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="操作">
+                                <template slot-scope="scope">
+                                    <el-button size="mini" @click="updateUser(scope.row)">修改用户</el-button>
+                                    <el-button size="mini" type="info" @click="handleDelete(scope.$index, scope.row)">
+                                        锁定账户</el-button>
+                                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                                        删除账户</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+
+
+                        <el-dialog title="修改信息" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+                            <el-form ref="user" :model="user" label-width="80px">
+                                <el-form-item label="账户">
+                                    <el-input v-model="user.username"></el-input>
+                                </el-form-item>
+                                <el-form-item label="角色">
+                                    <el-select v-model="user.role">
+                                        <el-option label="用户" value="用户"></el-option>
+                                        <el-option label="管理员" value="管理员"></el-option>
+                                    </el-select>
+                                </el-form-item>
+
+                                <el-form-item label="权限">
+                                    <el-checkbox-group v-model="user.auth">
+                                        <el-checkbox label="普通用户" name="auth1"></el-checkbox>
+                                        <el-checkbox label="后台操作" name="auth2"></el-checkbox>
+                                        <el-checkbox label="日志操作" name="auth3"></el-checkbox>
+                                    </el-checkbox-group>
+                                </el-form-item>
+
+                            </el-form>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button @click="dialogVisible = false">取 消</el-button>
+                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                            </span>
+                        </el-dialog>
+                        <br>
+                        <div style="padding:40px;">
+                            <el-button size="medium" @click="dialogVisible = true"><span><i class="el-icon-circle-plus-outline"></i>添加用户</span>
+                            </el-button>
+                        </div>
+                        <div style="text-align:center;padding:40px;">
+                            <el-pagination background layout="prev, pager, next" :total="1000">
+                            </el-pagination>
+                        </div>
+                    </div>
+
+                </el-main>
+
+                <el-footer style="margin-top:80px;">
+                    Copyright © 2020 Tencent. All Rights Reserved.
+                    <br>
+                    XXXX有限公司 版权所有
+                </el-footer>
+            </el-container>
+
+
+        </el-container>
+    </div>
+</body>
+<script src="js/config.js"></script>
+
+</html>
