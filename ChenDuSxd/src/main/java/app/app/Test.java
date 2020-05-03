@@ -30,10 +30,10 @@ public class Test {
         userRole.setUid(user.get_id());
         userRole.setRid(3);
         if(userDao.addUser(user)!=0&&userDao.addRole(userRole)!=0&&userDao.addUserData(new Users(user.get_id()))!=0){
-            return new Response(200,"插入成功！");
+            return new Response(200,"注册成功！");
         }
         else{
-            return new Response(400,"插入失败！");
+            return new Response(400,"注册失败！");
         }
     }
 }

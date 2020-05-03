@@ -1,5 +1,6 @@
 package app.auth;
 
+import app.admin.LoginLog;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ import java.util.Map;
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserServer userServer;
+    @Autowired
+    UserDao userDao;
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);

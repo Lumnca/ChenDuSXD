@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
@@ -262,5 +263,29 @@
     </div>
 </body>
 <script src="js/index.js"></script>
-
+<script>
+   if(app.islogin){
+       axios.get(host+"/lls")
+           .then(function (response) {
+               let i  =  response.data.page.totalElements+1
+               let l = {
+                   id : i,
+                   username:app.user.username,
+                   address:returnCitySN.cname,
+                   date : dateFormat(new Date(),1),
+                   ip : returnCitySN.cip
+               }
+               axios.post(host+"/lls",l)
+                   .then(function (response) {
+                       console.log("Login YES");
+                   })
+                   .catch(function (error) {
+                       console.log(error);
+                   });
+           })
+           .catch(function (error) {
+               console.log(error);
+           });
+   }
+</script>
 </html>

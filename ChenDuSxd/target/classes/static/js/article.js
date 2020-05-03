@@ -1,4 +1,4 @@
-axios.get('http://127.0.0.1:81/articles/')
+axios.get(host+'/articles/')
 .then(function (response) {
    app.maxIndex = response.data.page.totalElements+1;
 })
@@ -6,7 +6,7 @@ axios.get('http://127.0.0.1:81/articles/')
     console.log(error);
 });
 
-axios.get('http://127.0.0.1:81/sh_article/'+app.user.id)
+axios.get(host+'/sh_article/'+app.user.id)
 .then(function (response) {
    app.sh_articles =  response.data;
 })
@@ -14,7 +14,7 @@ axios.get('http://127.0.0.1:81/sh_article/'+app.user.id)
     console.log(error);
 });
 
-axios.get('http://127.0.0.1:81/tg_article/'+app.user.id)
+axios.get(host+'/tg_article/'+app.user.id)
 .then(function (response) {
     app.tg_articles =   response.data;
 })
@@ -22,7 +22,7 @@ axios.get('http://127.0.0.1:81/tg_article/'+app.user.id)
     console.log(error);
 });
 
-axios.get('http://127.0.0.1:81/er_article/'+app.user.id)
+axios.get(host+'/er_article/'+app.user.id)
 .then(function (response) {
     app.er_articles =  response.data;
 })

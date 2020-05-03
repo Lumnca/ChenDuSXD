@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.1/lib/index.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>网站设置</title>
+    <style>
+        @import url("https://unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
+
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            color: #333;
+        }
+
+        .el-footer {
+            background-color: #444444;
+            color: #eeeeee;
+            text-align: center;
+            padding: 80px 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <el-container style="height: 1000px; border: 1px solid #eee">
+            <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+                <el-menu :default-openeds="['1', '3']">
+                    <el-submenu v-for="e in menu" :index="e.index">
+                        <template slot="title"><i :class="e.icon"></i>{{e.title}}</template>
+                        <el-menu-item-group>
+                            <el-menu-item v-for="m in e.menu" :index="m.index">
+                                <el-link :underline="false" :href="m.herf">{{m.title}} </el-link>
+                            </el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+
+            <el-container>
+                <el-header style="text-align: right; font-size: 12px">
+                    <el-dropdown>
+                        <i class="el-icon-setting" style="margin-right: 15px"></i>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i>退出</span></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <span>Admin</span>
+                </el-header>
+
+                <el-main>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="公告通知" name="first">
+                            <el-table style="width: 100%" :data="webM">
+                                <el-table-column prop="title" label="标题">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="info" label="消息内容">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column label="操作"  fixed="right">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+
+
+
+                        </el-tab-pane>
+                        <el-tab-pane label="活动通知" name="second">
+                            <el-table style="width: 100%" :data="webM">
+                                <el-table-column prop="title" label="标题">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="info" label="消息内容" >
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column label="操作"  fixed="right">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+
+
+
+                        </el-tab-pane>
+                        <el-tab-pane label="网站链接" name="third">
+                            <el-table style="width: 100%" :data="webM">
+                                <el-table-column prop="title" label="标题">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="info" label="消息内容">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column label="操作"  fixed="right">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+
+
+                        </el-tab-pane>
+                        <el-tab-pane label="其他" name="fourth">定时任务补偿</el-tab-pane>
+                    </el-tabs>
+                    <el-dialog title="处理" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+                        <el-form ref="info" :model="info" label-width="80px">
+                            <el-form-item label="姓名">
+                                <el-input v-model="info.title"></el-input>
+                            </el-form-item>
+                            <el-form-item label="内容">
+                                <el-input type="textarea" v-model="info.info"></el-input>
+                            </el-form-item>
+
+
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="dialogVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                        </span>
+                    </el-dialog>
+                </el-main>
+
+                <el-footer style="margin-top:80px;">
+                    Copyright © 2020 Tencent. All Rights Reserved.
+                    <br>
+                    XXXX有限公司 版权所有
+                </el-footer>
+
+            </el-container>
+
+
+        </el-container>
+    </div>
+</body>
+<script src="js/config.js"></script>
+
+</html>

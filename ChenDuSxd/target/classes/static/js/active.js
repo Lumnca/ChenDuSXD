@@ -1,11 +1,11 @@
-axios.get('http://127.0.0.1:81/active')
+axios.get(host+'/active')
 .then(function (response) {
    app.actives = response.data;
 })
 .catch(function (error) {
     console.log(error);
 });
-axios.get('http://127.0.0.1:81/enrollM/'+app.user.id)
+axios.get(host+ '/enrollM/'+app.user.id)
 .then(function (response) {
 
    response.data.forEach(element => {

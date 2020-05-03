@@ -1,4 +1,50 @@
+var host = "http://127.0.0.1:81"; 
 
+
+var checkAge = (rule, value, callback) => {
+    if (!value) {
+        return callback(new Error('电话不能为空'));
+    }
+    setTimeout(() => {
+        if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+        } else {
+                callback();
+            }
+    }, 1000);
+};
+var validateID = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('请输入账号'));
+    } else {
+        if (app.loginForm.username.indexOf("'") != -1 || app.loginForm.username.indexOf("(") != -1 || app.loginForm.username.indexOf(")") != -1) {
+            callback(new Error('非法字符'));
+        }
+        else if(app.loginForm.username.length<3&&app.loginForm.username.length>20){
+            callback(new Error('长度只能在3~20'));
+        }
+        else {
+            callback();
+        }
+
+    }
+};
+var validatePass = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('请输入密码'));
+    } else {
+        callback();
+    }
+};
+var validatePass2 = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('请再次输入密码'));
+    } else if (value !== app.loginForm.password) {
+        callback(new Error('两次输入密码不一致!'));
+    } else {
+        callback();
+    }
+};
 var app = new Vue({
     el: '#app',
     data: {
@@ -9,32 +55,24 @@ var app = new Vue({
         islogin: false,
         centerDialogVisible: false,
         loginForm: {
-            pass: '',
-            checkPass: '',
-            age: '',
-            id: '',
-            number: 0,
-            result: -1
-        },
-        ruleForm: {
             password: '',
             checkPass: '',
             tel: '',
-            username:''
+            username: '',
+            result: -1
         },
         rules: {
-            username: [
-                { required: true, message: '请输入账户名称！', trigger: 'blur' },
-                { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
-            ],
             password: [
-                {  required: true, message: '输入密码', trigger: 'blur' }
+                { validator: validatePass, trigger: 'blur' }
             ],
             checkPass: [
-                {  required: true, message: '请再次输入密码', trigger: 'blur' }
+                { validator: validatePass2, trigger: 'blur' }
             ],
             tel: [
-                { type: 'number', required: true, message: '请输入数值', trigger: 'change' }
+                { validator: checkAge, trigger: 'blur' }
+            ],
+            username: [
+                { validator: validateID, trigger: 'blur' }
             ]
         },
         user: JSON.parse(gets("_user")) || { id: '', name: 'Lumnca' },
@@ -69,7 +107,7 @@ var app = new Vue({
         article: JSON.parse(gets('_mst')) || {},
         userdata: {},
         fileList: [
-            { name: 'lb.png', url: 'http://127.0.0.1:81/public/lb.png' },
+            { name: 'lb.png', url: host+ '/public/lb.png' },
         ],
         filter: {
             key: '',
@@ -94,48 +132,42 @@ var app = new Vue({
         active2: [],
         currentPage: 1,
         pages: 4,
-        maxIndex: 0
+        maxIndex: 0,
+        ui : 0
     },
     methods: {
         reload(url) {
             window.location.href = url;
         },
         submitForm(formName) {
+
             this.$refs[formName].validate((valid) => {
-                    if (valid&&app.ruleForm.password==app.ruleForm.checkPass) {
 
-                        var user = {
-                            _id : 0,
-                            _username : app.ruleForm.username,
-                            _password : app.ruleForm.password,
-                            _enabled : 1,
-                            _locked : 0
-                        }
-                     axios.post('http://127.0.0.1:81/adduser',user)
-                    .then(function (response) {
-                        app.$message({
-                            message: response.data.message + " 2s后跳转",
-                            type: 'success'
-                        });
-                        setTimeout(function () {
-                                window.location.href = "index.html";
-                        },2000)
-                    })
-                         .catch(function (error) {
-                             app.$message.error('操作失败！');
-                             console.log(error);
-                         });
+                if (valid) {
+                    let yu = {
+                        _id : 999,
+                        _username : app.loginForm.username,
+                        _password : app.loginForm.password,
+                        _enabled : 1,
+                        _locked : 0,
 
-
-                    } else {
-                        console.log('error submit!!');
-                        app.$message.error('验证错误！请检查输入');
-                        return false;
                     }
+                    axios.post(host+ '/adduser',yu)
+                        .then(function (response) {
+                            app.$message({
+                                message: response.data.message,
+                                type: 'info'
+                            });
+                        })
+                        .catch(function (error) {
+                            this.$message.error('检查错误');
+                        });
+
+                } else {
+                    this.$message.error('验证错误！检查输入');
+                    return false;
+                }
             });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
         },
         out() {
             this.user = { id: '' }
@@ -146,7 +178,7 @@ var app = new Vue({
         onSubmit() {
             let data = this.form;
             data.uid = JSON.parse(gets('_user')).id;
-            axios.put('http://127.0.0.1:81/users/' + data.uid, data)
+            axios.put(host+ '/users/' + data.uid, data)
                 .then(function (response) {
                     app.$message({
                         message: '修改成功！',
@@ -205,12 +237,26 @@ var app = new Vue({
                 aname: active.name
             }
 
-            axios.post('http://127.0.0.1:81/enrollA', e)
+            axios.post(host+'/enrollA', e)
                 .then(function (response) {
                     app.$message({
                         message: response.data.message,
                         type: 'success'
                     });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            let o = {
+                id : 9999,
+                date : dateFormat(new Date(),1),
+                user : app.user.username,
+                operation : '活动报名',
+                info :'用户报名了'+e.aname
+            }
+            axios.post(host+'/ols', o)
+                .then(function (response) {
+                  console.log("LOG YES");
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -249,12 +295,26 @@ var app = new Vue({
                 uid: app.user.id,
                 imgurl: data.imgurl
             };
-            axios.post('http://127.0.0.1:81/articles', article)
+            axios.post(host+'/articles', article)
                 .then(function (response) {
                     app.$message({
                         message: '上传成功，请等待审核！',
                         type: 'success'
                     });
+                    let o = {
+                        id : 9999,
+                        date : dateFormat(new Date(),1),
+                        user : app.user.username,
+                        operation : '提交文章',
+                        info :'用户提交了文章！主题为'+article.title
+                    }
+                    axios.post(host+'/ols', o)
+                        .then(function (response) {
+                            console.log("LOG YES");
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);
@@ -268,12 +328,26 @@ var app = new Vue({
         backArt(a) {
             a.state = -1;
             a.content = '用户个人操作';
-            axios.put('http://127.0.0.1:81/articles/' + a.aid, a)
+            axios.put(host+'/articles/' + a.aid, a)
                 .then(function (response) {
                     app.$message({
                         message: '撤回成功！',
                         type: 'success'
                     });
+                    let o = {
+                        id : 9999,
+                        date : dateFormat(new Date(),1),
+                        user : app.user.username,
+                        operation : '撤销操作',
+                        info :'用户撤销了文章申请！主题为'+a.title
+                    }
+                    axios.post(host+'/ols', o)
+                        .then(function (response) {
+                            console.log("LOG YES");
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);
