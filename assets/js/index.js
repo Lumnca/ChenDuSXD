@@ -318,6 +318,20 @@ var app = new Vue({
             }
             else {
                 this.islogin = true;
+                let l = {
+                    id : 1,
+                    username:'xx',
+                    address:'xxxx',
+                    date : dateFormat(new Date(),1),
+                    ip : '127.0.0.1'
+                }
+                axios.post(host+"/lls",l)
+                .then(function (response) {
+                   console.log("YES");
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
                 return ''
             }
         },
