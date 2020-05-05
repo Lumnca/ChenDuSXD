@@ -54,7 +54,7 @@
                     <el-dropdown>
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i>退出</span></el-dropdown-item>
+                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i><a href="/index.html">退出</a></span></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <span>Admin</span>
@@ -68,27 +68,33 @@
                                 <el-table-column prop="date" label="提交日期" sortable>
                                     <template slot-scope="scope">
                                         <i class="el-icon-alarm-clock"></i>
-                                        <span style="margin-left: 10px;color: #e93f55;">{{ scope.row.date}}</span>
+                                        <span style="margin-left: 10px;color: #e93f55;">{{ scope.row.createtime}}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="username" label="用户名">
+                                <el-table-column prop="uid" label="用户ID">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.uid }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="source" label="作者">
                                     <template slot-scope="scope">
                                         <i class="el-icon-user"></i>
-                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.username }}</span>
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.source }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="title" label="主题" width="280">
+                                <el-table-column prop="title" label="主题" width="480">
                                     <template slot-scope="scope">
                                         <i class="el-icon-star-off"></i>
                                         <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="state" label="状态" width="280" sortable>
+                                <el-table-column prop="state" label="状态"  sortable>
                                     <template slot-scope="scope">
                                         <i class="el-icon-guide"></i>
                                         <span style="margin-left: 10px;">
                                             <el-tag v-if="scope.row.state==1" type="success">已处理</el-tag>
-                                            <el-tag v-else>待处理</el-tag>
+                                            <el-tag v-else-if="scope.row.state==0">待审核</el-tag>
+                                            <el-tag v-else type="danger">已被删除</el-tag>
                                         </span>
                                     </template>
                                 </el-table-column>
@@ -97,27 +103,142 @@
                                         <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
                                     </template>
                                     <template slot-scope="scope">
-                                        <el-button size="mini" @click="updateUser(scope.row)">查看内容 </el-button>
+                                        <el-button size="mini" @click="lookArt(scope.row)">查看内容 </el-button>
+                                        <el-button size="mini" @click="checkArt(scope.row)">核审 </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
 
                             <div style="text-align:center;padding:40px;">
-                                <el-pagination background layout="prev, pager, next" :total="1000">
+                                <el-pagination  @current-change="handleCurrentChange3" background layout="prev, pager, next"  :page-size="10"  :total="maxN1"  :current-page="currentPage1">
                                 </el-pagination>
                             </div>
+                            <el-dialog
+                                    title="内容"
+                                    :visible.sync="dialogVisible"
+                                    width="30%">
+                                <div>
+                                    {{article.content}}
+                                </div>
+                                <br>
+
+                                <div>
+                                    <h4>主题图片</h4>
+                                    <br>
+                                    <img :src="'http://127.0.0.1:81/public/'+article.imgurl" width="200">
+                                </div>
+                                <span slot="footer" class="dialog-footer">
+                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                              </span>
+                            </el-dialog>
+                            <el-dialog
+                                    title="内容"
+                                    :visible.sync="dialogVisible2"
+                                    width="30%">
+                                <el-form ref="article" :model="article" label-width="80px">
+                                    <el-form-item label="状态">
+                                        <el-select v-model="article.state"  >
+                                            <el-option label="审核中" :value="0"></el-option>
+                                            <el-option label="通过" :value="1"></el-option>
+                                            <el-option label="未通过" :value="-1"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+
+                                    <el-form-item label="文章分类" v-if="article.state==1">
+                                        <el-select v-model="article.sortid" label="文章分类" >
+                                            <el-option label="未分类" :value="0"></el-option>
+                                            <el-option label="名医堂" :value="1"></el-option>
+                                            <el-option label="名师馆" :value="2"></el-option>
+                                            <el-option label="通用" :value="3"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+
+
+                                    <el-form-item label="未通过审核原因" v-if="article.state==-1">
+                                        <el-input type="textarea" v-model="article.content"></el-input>
+                                    </el-form-item>
+
+                                </el-form>
+                                <span slot="footer" class="dialog-footer">
+                                <el-button  @click="dialogVisible2 = false">取 消</el-button>
+                                <el-button type="primary" @click="shArt(article)">确 定</el-button>
+                              </span>
+                            </el-dialog>
                         </el-tab-pane>
                         <el-tab-pane label="活动申请">
-                            <el-collapse v-model="activeNames" @change="handleChange">
+                            <el-collapse v-model="activeNames">
                                 <el-collapse-item v-for="a in actives" :title="a.name" :name="a.id">
                                     <span>活动报名日期: {{a.start_time}} ~ {{a.end_time}} | 活动开始日期: {{a.date}}
                                         参加人数:{{a.number}}</span>
                                     
                                     <el-button size="mini" @click="getPeopleInfo(a)">获取人员信息 </el-button>
-                                        
+
+                                    <el-button size="mini" @click="updateActiveInfo(a)">修改活动信息 </el-button>
+
                                 </el-collapse-item>
 
                             </el-collapse>
+
+                            <el-button  @click="addActive()"><i class="el-icon-circle-plus-outline"></i> 添加活动 </el-button>
+
+                            <el-dialog
+                                    title="内容"
+                                    :visible.sync="dialogVisible3"
+                                    width="30%">
+                                <el-form ref="act" :model="act" label-width="160px">
+
+                                    <el-form-item label="活动名称">
+                                        <el-input v-model="act.name"></el-input>
+                                    </el-form-item>
+
+
+                                    <el-form-item label="报名开始时间">
+                                        <el-col :span="11">
+                                            <el-date-picker type="date" placeholder="选择日期" v-model="act.start_time" style="width: 100%;"></el-date-picker>
+                                        </el-col>
+                                        <el-col class="line" :span="2">-</el-col>
+                                        <el-col :span="11">
+                                            <el-time-picker placeholder="选择时间" v-model="act.start_time" style="width: 100%;"></el-time-picker>
+                                        </el-col>
+                                    </el-form-item>
+
+                                    <el-form-item label="报名结束时间">
+                                        <el-col :span="11">
+                                            <el-date-picker type="date" placeholder="选择日期" v-model="act.end_time" style="width: 100%;"></el-date-picker>
+                                        </el-col>
+                                        <el-col class="line" :span="2">-</el-col>
+                                        <el-col :span="11">
+                                            <el-time-picker placeholder="选择时间" v-model="act.end_time" style="width: 100%;"></el-time-picker>
+                                        </el-col>
+                                    </el-form-item>
+
+                                    <el-form-item label="活动开始时间">
+                                        <el-col :span="11">
+                                            <el-date-picker type="date" placeholder="选择日期" v-model="act.date" style="width: 100%;"></el-date-picker>
+                                        </el-col>
+                                        <el-col class="line" :span="2">-</el-col>
+                                        <el-col :span="11">
+                                            <el-time-picker placeholder="选择时间" v-model="act.date" style="width: 100%;"></el-time-picker>
+                                        </el-col>
+                                    </el-form-item>
+
+
+                                    <el-form-item label="活动介绍">
+                                        <el-input type="textarea" v-model="act.info"></el-input>
+                                    </el-form-item>
+
+                                    <el-form-item label="活动地址">
+                                        <el-input v-model="act.address"></el-input>
+                                    </el-form-item>
+
+
+                                </el-form>
+                                <span slot="footer" class="dialog-footer">
+                                <el-button  @click="dialogVisible3 = false">取 消</el-button>
+                                <el-button type="primary" @click="upAct(act)">确 定</el-button>
+                              </span>
+                            </el-dialog>
+
                         </el-tab-pane>
                     </el-tabs>
 
@@ -129,11 +250,37 @@
                     XXXX有限公司 版权所有
                 </el-footer>
             </el-container>
-
-
         </el-container>
     </div>
 </body>
 <script src="js/config.js"></script>
+<script>
+    axios.get(host+'/articles/',{
+        params:{
+            page : 0,
+            size:10
+        }
+    })
+        .then(function (response) {
+            app.maxN1 = response.data.page.totalElements;
+            app.articles = response.data._embedded.articles;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 
+
+    axios.get(host+'/actives/')
+        .then(function (response) {
+
+            app.actives = response.data._embedded.actives;
+
+            app.actives.forEach(e=>{
+                e.id = e._links.active.href.split('/').pop();
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+</script>
 </html>

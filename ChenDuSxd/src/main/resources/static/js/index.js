@@ -52,6 +52,7 @@ var app = new Vue({
         activeName: 'style',
         ac: 'info',
         circleUrl: "",
+        nameZ : "",
         islogin: false,
         centerDialogVisible: false,
         loginForm: {
@@ -133,11 +134,21 @@ var app = new Vue({
         currentPage: 1,
         pages: 4,
         maxIndex: 0,
-        ui : 0
+        ui : 0,
+        x : {
+            title:"",date:"",source : "",object:"",content:""
+        },
+        tg : [],
+        xx : [],
+        hr : []
     },
     methods: {
         reload(url) {
             window.location.href = url;
+        },
+        showXX(p){
+            sets("_xx",JSON.stringify(p));
+            this.reload('info.html');
         },
         submitForm(formName) {
 
@@ -246,6 +257,7 @@ var app = new Vue({
                     });
                 })
                 .catch(function (error) {
+                    alert("已报名！或者网络错误。")
                     console.log(error);
                 });
             let o = {
@@ -284,16 +296,17 @@ var app = new Vue({
             });
         },
         createArticle(data) {
+
             let article = {
                 aid: app.maxIndex,
                 sortid: 0,
                 title: data.title,
-                source: app.user.name,
+                source: app.nameZ || app.username,
                 createtime: dateFormat(new Date(), 1),
                 publishtime: '',
                 state: 0,
                 content: data.content,
-                uid: app.user.id,
+                uid: app.user.username,
                 imgurl: data.imgurl
             };
             axios.post(host+'/articles', article)

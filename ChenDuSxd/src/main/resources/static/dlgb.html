@@ -44,7 +44,7 @@
                     <el-col :span="1" style="float:right;">
                         <div class="grid-content bg-purple" v-if="islogin">
                             <el-dropdown>
-                                <el-avatar :size="60" src="https://empty">
+                                <el-avatar :size="60" src="img/user.png">
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
@@ -93,10 +93,11 @@
 
                 <el-container>
                     <el-main>
-                        <el-tabs v-model="activeName" @tab-click="handleClick">
-                            <el-tab-pane label="我的队报" name="first">1</el-tab-pane>
+                        <el-tabs v-model="activeName">
+                            <el-tab-pane label="我的队报" name="first">暂无数据</el-tab-pane>
                             <el-tab-pane label="红领巾广播站" name="second">
-
+                                暂无数据
+                                <!--
                                 <div class="mst">
                                     <el-row>
                                         <el-col :span="24">
@@ -107,8 +108,8 @@
                                                     </el-col>
                                                     <el-col :span="18">
                                                         <div style="text-align:left;">
-                                                            <el-tag>名医馆</el-tag>
-                                                            天亦是美网络给大家介绍一款可以在线激活win10、win8/8.1MS 神龙版。
+                                                            <el-tag>队报</el-tag>
+                                                            XXXXXXXXXXXXXXXXXXXXXXXXX
                                                         </div>
                                                         <div style="margin-top:48px;font-size:22px;">
                                                             <el-col :span="4" style="color: #555555;">
@@ -129,10 +130,10 @@
                                         </el-col>
                                     </el-row>
                                 </div>
-
+                                -->
                             </el-tab-pane>
-                            <el-tab-pane label="我的队课" name="third">2</el-tab-pane>
-                            <el-tab-pane label="风采墙" name="fourth">3</el-tab-pane>
+                            <el-tab-pane label="我的队课" name="third">暂无数据</el-tab-pane>
+                            <el-tab-pane label="风采墙" name="fourth">暂无数据</el-tab-pane>
                         </el-tabs>
 
                     </el-main>

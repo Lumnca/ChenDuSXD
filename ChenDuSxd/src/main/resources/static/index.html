@@ -44,11 +44,16 @@
                     <el-col :span="1" style="float:right;">
                         <div class="grid-content bg-purple" v-if="islogin">
                             <el-dropdown>
-                                <el-avatar :size="60" src="https://empty">
+                                <el-avatar :size="60" src="img/user.png">
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item>{{user.username}}</el-dropdown-item>
+                                    <el-dropdown-item v-if="user.username=='admin'">
+                                        <el-button type="text" @click="reload('admin/index.html')"><span><i
+                                                class="el-icon-suitcase"></i>管理中心</span>
+                                        </el-button>
+                                    </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-button type="text" @click="reload('user.html')"><span><i
                                                     class="el-icon-suitcase"></i>用户中心</span></el-button>
@@ -171,81 +176,24 @@
                             <el-row :gutter="20">
                                 <el-col :span="12">
                                     <div>
-                                        <el-divider content-position="right">近期活动</el-divider>
+                                        <el-divider content-position="right">近期消息</el-divider>
                                         <div class="list">
-                                            <el-row :gutter="20">
-                                                <el-col :span="22">
-                                                    <a href="info.html">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
+                                            <el-row :gutter="20" v-for="(p,i) in xx" v-if="i<5">
+                                                <el-col :span="20">
+                                                    <el-button type="text"  @click="showXX(p)">{{p.title}}</el-button>
                                                 </el-col>
-                                                <el-col :span="2">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                            <el-row :gutter="20">
-                                                <el-col :span="22">
-                                                    <a href="info.html">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
-                                                </el-col>
-                                                <el-col :span="2">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                            <el-row :gutter="20">
-                                                <el-col :span="22">
-                                                    <a href="#">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
-                                                </el-col>
-                                                <el-col :span="2">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                            <el-row :gutter="20">
-                                                <el-col :span="22">
-                                                    <a href="#">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
-                                                </el-col>
-                                                <el-col :span="2">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                            <el-row :gutter="20">
-                                                <el-col :span="22">
-                                                    <a href="#">教育部官网报道我校向孔子学院境外合作院校捐赠防疫物资</a>
-                                                </el-col>
-                                                <el-col :span="2">
-                                                    4-25
+                                                <el-col :span="4">
+                                                    {{p.date}}
                                                 </el-col>
                                             </el-row>
                                         </div>
                                     </div>
                                 </el-col>
-                                <el-col :span="6">
-                                    <div>
-                                        <el-divider content-position="right">公告</el-divider>
-                                        <div class="list">
-                                            <el-row :gutter="20">
-                                                <el-col :span="20">
-                                                    <a href="#">系统更新</a>
-                                                </el-col>
-                                                <el-col :span="4">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                            <el-row :gutter="20">
-                                                <el-col :span="20">
-                                                    <a href="#">BUG修复</a>
-                                                </el-col>
-                                                <el-col :span="4">
-                                                    4-25
-                                                </el-col>
-                                            </el-row>
-                                        </div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="6">
+                                <el-col :span="12">
                                     <div>
                                         <el-divider content-position="right">链接</el-divider>
-                                        <div class="list">
-                                            <div>-------------------</div>
-                                            <div>-------------------</div>
-                                            <div>-------------------</div>
+                                        <div style="text-align: right;margin-top: 8px;">
+                                            <div v-for="(h,i) in hr" v-if="i<5"><a :href="h.herf">{{h.title}}</a></div>
                                         </div>
                                     </div>
                                 </el-col>
@@ -287,5 +235,21 @@
                console.log(error);
            });
    }
+
+   axios.get(host+"/notices")
+       .then(function (response) {
+           app.xx = response.data._embedded.notices;
+       })
+       .catch(function (error) {
+           console.log(error);
+       });
+
+   axios.get(host+"/hrefs")
+       .then(function (response) {
+           app.hr = response.data._embedded.herfs;
+       })
+       .catch(function (error) {
+           console.log(error);
+       });
 </script>
 </html>

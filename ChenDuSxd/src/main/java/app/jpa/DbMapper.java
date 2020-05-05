@@ -25,4 +25,11 @@ public interface DbMapper {
 
     @Select("SELECT * FROM Authentication.tb_users where uid = #{id}")
     Users getUserData(Integer id);
+
+    @Select("SELECT * FROM Authentication.tb_enroll where aid = #{id}")
+    List<Enroll> getActivePeople(Integer id);
+
+
+    @Select("UPDATE Authentication.tb_enroll SET state = #{s} WHERE aid = #{aid} and uid =  #{uid}")
+    Integer peopleJoinA(Integer s,Integer aid,Integer uid);
 }

@@ -54,14 +54,14 @@
                     <el-dropdown>
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i>退出</span></el-dropdown-item>
+                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i><a href="/index.html">退出</a></span></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <span>Admin</span>
                 </el-header>
 
                 <el-main>
-                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tabs v-model="activeName">
                         <el-tab-pane label="公告通知" name="first">
                             <el-table style="width: 100%" :data="webM">
                                 <el-table-column prop="title" label="标题">
@@ -69,83 +69,104 @@
                                         <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="info" label="消息内容">
+
+
+                                <el-table-column prop="date" label="日期">
                                     <template slot-scope="scope">
-                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.date }}</span>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column prop="source" label="来源处">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.source }}</span>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column prop="object" label="对象">
+                                    <template slot-scope="scope">
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.object }}</span>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column label="操作"  fixed="right">
                                     <template slot-scope="scope">
-                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
+                                        <el-button size="mini" @click="updateNotice(scope.row)">修改 </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
-
-
-
                         </el-tab-pane>
-                        <el-tab-pane label="活动通知" name="second">
-                            <el-table style="width: 100%" :data="webM">
-                                <el-table-column prop="title" label="标题">
-                                    <template slot-scope="scope">
-                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="info" label="消息内容" >
-                                    <template slot-scope="scope">
-                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
-                                    </template>
-                                </el-table-column>
-
-                                <el-table-column label="操作"  fixed="right">
-                                    <template slot-scope="scope">
-                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
 
 
-
-                        </el-tab-pane>
                         <el-tab-pane label="网站链接" name="third">
-                            <el-table style="width: 100%" :data="webM">
+                            <el-table style="width: 100%" :data="hrefs">
                                 <el-table-column prop="title" label="标题">
                                     <template slot-scope="scope">
                                         <span style="margin-left: 10px;color: #909069;">{{ scope.row.title }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="info" label="消息内容">
+
+                                <el-table-column prop="info" label="链接地址">
                                     <template slot-scope="scope">
-                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.info }}</span>
+                                        <span style="margin-left: 10px;color: #909069;">{{ scope.row.herf }}</span>
                                     </template>
                                 </el-table-column>
 
                                 <el-table-column label="操作"  fixed="right">
                                     <template slot-scope="scope">
-                                        <el-button size="mini" @click="updateInfo(scope.row)">修改 </el-button>
+                                        <el-button size="mini" @click="updateHref(scope.row)">修改 </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
-
-
                         </el-tab-pane>
-                        <el-tab-pane label="其他" name="fourth">定时任务补偿</el-tab-pane>
+                        <el-tab-pane label="其他" name="fourth">暂无数据</el-tab-pane>
                     </el-tabs>
-                    <el-dialog title="处理" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-                        <el-form ref="info" :model="info" label-width="80px">
-                            <el-form-item label="姓名">
-                                <el-input v-model="info.title"></el-input>
+
+                    <el-dialog title="修改通告" :visible.sync="dialogVisible" width="30%">
+                        <el-form ref="notice" :model="notice" label-width="80px">
+
+                            <el-form-item label="标题">
+                                <el-input v-model="notice.title"></el-input>
                             </el-form-item>
+
+                            <el-form-item label="来源">
+                                <el-input v-model="notice.source"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="面向群体">
+                                <el-input v-model="notice.object"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="日期">
+                                <el-input v-model="notice.date"></el-input>
+                            </el-form-item>
+
                             <el-form-item label="内容">
-                                <el-input type="textarea" v-model="info.info"></el-input>
+                                <el-input type="textarea" v-model="notice.content"></el-input>
                             </el-form-item>
-
-
                         </el-form>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="dialogVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                            <el-button type="primary" @click="noticePost(notice)">确 定</el-button>
+                        </span>
+                    </el-dialog>
+
+
+                    <el-dialog title="修改链接" :visible.sync="dialogVisible2" width="30%">
+                        <el-form ref="href" :model="href" label-width="80px">
+
+                            <el-form-item label="标题">
+                                <el-input v-model="href.title"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="链接地址">
+                                <el-input v-model="href.herf"></el-input>
+                            </el-form-item>
+
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="dialogVisible2 = false">取 消</el-button>
+                            <el-button type="primary" @click="hrefPost(href)">确 定</el-button>
                         </span>
                     </el-dialog>
                 </el-main>
@@ -163,5 +184,23 @@
     </div>
 </body>
 <script src="js/config.js"></script>
+<script>
 
+
+    axios.get(host+"/notices")
+        .then(function (response) {
+            app.webM = response.data._embedded.notices;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    axios.get(host+"/hrefs")
+        .then(function (response) {
+            app.hrefs = response.data._embedded.herfs;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+</script>
 </html>

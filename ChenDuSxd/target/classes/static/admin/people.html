@@ -54,7 +54,7 @@
                     <el-dropdown>
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i>退出</span></el-dropdown-item>
+                            <el-dropdown-item><span><i class="el-icon-arrow-right"></i><a href="/index.html">退出</a></span></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <span>Admin</span>
@@ -63,10 +63,10 @@
                 <el-main>
                     <el-table style="width: 100%"
                         :data="people.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
-                        <el-table-column prop="username" label="账户">
+                        <el-table-column prop="aid" label="账户ID">
                             <template slot-scope="scope">
                                 <i class="el-icon-user"></i>
-                                <span style="margin-left: 10px;color: #909069;">{{ scope.row.username }}</span>
+                                <span style="margin-left: 10px;color: #909069;">{{ scope.row.aid }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="name" label="参与者姓名" width="280">
@@ -75,10 +75,10 @@
                                 <span style="margin-left: 10px;color: #909069;">{{ scope.row.name }}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="tel" label="联系电话" width="280">
+                        <el-table-column prop="telphone" label="联系电话" width="280">
                             <template slot-scope="scope">
                                 <i class="el-icon-phone-outline"></i>
-                                <span style="margin-left: 10px;color: #909069;">{{ scope.row.tel }}</span>
+                                <span style="margin-left: 10px;color: #909069;">{{ scope.row.telphone }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="state" label="状态" width="280" sortable>
@@ -101,20 +101,22 @@
                     </el-table>
 
 
-                    <el-dialog title="处理" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+                    <el-dialog title="处理" :visible.sync="dialogVisible" width="30%">
                         <el-form ref="juser" :model="juser" label-width="80px">
                             <el-form-item label="姓名">
                                 <el-input v-model="juser.name" disabled></el-input>
                             </el-form-item>
                             <el-form-item label="电话">
-                                    <el-input v-model="juser.tel" disabled></el-input>
+                                    <el-input v-model="juser.telphone" disabled></el-input>
                                 </el-form-item>
                             <el-form-item label="状态">
                                 <el-select v-model="juser.state">
                                     <el-option label="筛选通过" :value="1"></el-option>
-                                    <el-option label="审核中" :value="0"></el-option>
-                                    <el-option label="条件不符合" :value="-2"></el-option>
-                                    <el-option label="缺席" :value="-1"></el-option>
+                                    <el-option label="审核中" :value="2"></el-option>
+                                    <el-option label="满员(不通过)" :value="3"></el-option>
+                                    <el-option label="条件不符合" :value="4"></el-option>
+                                    <el-option label="其他" :value="-1"></el-option>
+
                                 </el-select>
                             </el-form-item>
 
@@ -122,7 +124,7 @@
                         </el-form>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="dialogVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                            <el-button type="primary" @click="peopleAc(juser) = false">确 定</el-button>
                         </span>
                     </el-dialog>
                 </el-main>
@@ -139,5 +141,14 @@
     </div>
 </body>
 <script src="js/config.js"></script>
-
+<script>
+    var ac = JSON.parse(window.localStorage.getItem("_ac"));
+    axios.get(host+'/admin/acp/'+ac.id)
+        .then(function (response) {
+            app.people = response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+</script>
 </html>

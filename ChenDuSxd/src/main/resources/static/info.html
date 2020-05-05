@@ -45,7 +45,7 @@
                     <el-col :span="1" style="float:right;">
                         <div class="grid-content bg-purple" v-if="islogin">
                             <el-dropdown>
-                                <el-avatar :size="60" src="https://empty">
+                                <el-avatar :size="60" src="img/user.png">
                                     <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                                 </el-avatar>
                                 <el-dropdown-menu slot="dropdown">
@@ -95,22 +95,15 @@
                     <el-main>
                         <div class="info">
                             <div style="text-align:center;height: 100px;">
-                                <h4><span class="el-icon-bell"></span> 关于成都市少工委官方微信公众号变更的通知</h4>
+                                <h4><span class="el-icon-bell"></span>  {{x.title}}</h4>
                             </div>
                             <div style="line-height: 32px;text-align:left;height: 400px;">
-                                各位少先队员、家长、少先队工作者：
+                                {{x.object}}：
                                 <br>
-                                   
-                                 衷心感谢您一直以来对“成都少先队”微信公众号的关注和支持！因公众号运营需要，成都市少工委官方公众号由“成都少先队”变更为“成都红领巾”（微信号：cdhlj1013），名师堂、名医馆、红领巾广播站、红领巾志愿者、红领巾活力时光等功能板块将迁移至“成都红领巾”微信公众号上，原公众号上相关功能将取消。希望大家关注“成都红领巾”微信公众号，未来我们将继续努力，为大家提供最新鲜的活动资讯，最营养的知识大餐，最贴心的沟通平台。
-
-                                     由此给您带来的不便，敬请谅解！
-
-
-                                成都市少工委2020年3月12日
-
+                                {{x.content}}
                             </div>
                             <div style="line-height: 32px;text-align:right;height: 100px;">
-                                成都市少工委2020年3月12日
+                                {{x.source}} - {{x.date}}
                             </div>
                         </div>
                     </el-main>
@@ -125,5 +118,7 @@
     </div>
 </body>
 <script src="js/index.js"></script>
-
+<script>
+    app.x = JSON.parse(window.localStorage.getItem("_xx"));
+</script>
 </html>
