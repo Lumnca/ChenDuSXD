@@ -74,4 +74,9 @@ public class DbApi {
         dbMapper.peopleJoinA(state,aid,uid);
         return new Response(200,"修改成功！");
     }
+    @CrossOrigin
+    @GetMapping("/message/{name}")
+    public List<Message> getUserMessage(@PathVariable String name){
+        return dbMapper.getUserMessage(name);
+    }
 }

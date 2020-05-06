@@ -37,4 +37,7 @@ public interface UserMapper {
     Integer lockedUser(String name,Integer s);
     @Update("UPDATE user SET _enabled = 0 WHERE  _username = #{name} and _id > 0")
     Integer delUser(String name);
+
+    @Update("UPDATE user SET _password = #{password} WHERE  _username = #{name} and _id > 0")
+    Integer updateUserPassword(String password,String name);
 }

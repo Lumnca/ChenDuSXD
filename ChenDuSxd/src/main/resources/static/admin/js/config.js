@@ -15,7 +15,8 @@ var eu = [
         icon: 'el-icon-menu',
         menu : [
             {index : '2-1',title : '用户管理',herf : 'user.html'},
-            {index : '2-2',title : '提交管理',herf : 'submit.html'}
+            {index : '2-2',title : '提交管理',herf : 'submit.html'},
+            {index : '2-3',title : '信息管理',herf : 'message.html'}
         ]
     },
     {
@@ -40,7 +41,7 @@ var app = new Vue({
         dialogVisible3 :false,
         currentPage1 : 0,
         maxN1 : 100,
-        user : {id:'',_username:'',_enabled:'',roles:'',_locked:''},
+        user : {id:'',_username:'',_enabled:'',roles:'',_locked:'',password:''},
         juser: {username:'sang',tel:'41412551',name:'xxx',state:0},
         search : '',
         info : {},
@@ -77,12 +78,31 @@ var app = new Vue({
             imgurl : ''
         },
         act : {id:999,name:'活动名称',number:'0',address:'成都市',start_time:'2020-1-1 12:00',end_time:'2020-1-1 12:00',date:'2020-1-1 12:00',state:0,info:'',uid:0},
-        isAdd : false
+        isAdd : false,
+        messages : []
     },
     methods: {
         updateUser(user){
             this.user = user;
             this.dialogVisible = true;
+        },
+        updateUserPassword(user){
+            axios.post(host+'/admin/set',{
+                username : user._username,
+                password:user.password
+            })
+                .then(function (response) {
+
+                    app.$message(response.data.message);
+
+                    operationPost("修改用户密码","修改了账户ID为："+user._username+" 的密码")
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+
+            this.dialogVisible = false;
         },
         reherf(url){
             window.location.href = url;
@@ -115,7 +135,7 @@ var app = new Vue({
                          type: 'success'
                      });
 
-                     operationPost("修改活动！","修改了ID为："+act.id+"的活动")
+                     operationPost("修改活动！","修改了ID为："+act.id+" 的活动")
                  })
                  .catch(function (error) {
                      app.$message("操作失败！");

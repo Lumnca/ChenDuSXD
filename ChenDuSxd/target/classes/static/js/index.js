@@ -45,6 +45,7 @@ var validatePass2 = (rule, value, callback) => {
         callback();
     }
 };
+
 var app = new Vue({
     el: '#app',
     data: {
@@ -140,7 +141,8 @@ var app = new Vue({
         },
         tg : [],
         xx : [],
-        hr : []
+        hr : [],
+        messages : []
     },
     methods: {
         reload(url) {
@@ -169,6 +171,7 @@ var app = new Vue({
                                 message: response.data.message,
                                 type: 'info'
                             });
+                            operationPost("注册用户",yu._username+"用户被注册了")
                             window.location.href = "index.html";
                         })
                         .catch(function (error) {
@@ -196,6 +199,7 @@ var app = new Vue({
                         message: '修改成功！',
                         type: 'success'
                     });
+                    operationPost("修改信息","用户ID："+data.id + " 修改了自己的用户信息");
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -237,6 +241,19 @@ var app = new Vue({
         joinActive(act) {
             this.active = act;
             this.jactive2 = true;
+        },
+        handleEdit(m){
+            m.state = 1;
+             axios.put(host+'/messages/'+m.id, m)
+            .then(function (response) {
+                app.$message({
+                    message: '确认成功！',
+                    type: 'success'
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         },
         enroll(active) {
             let e = {

@@ -62,6 +62,11 @@ public class UserDao implements UserMapper {
     }
 
     @Override
+    public Integer updateUserPassword(String password, String name) {
+        return userMapper.updateUserPassword(password,name);
+    }
+
+    @Override
     public User loadUserByUsername(String username) {
         return userMapper.loadUserByUsername(username);
     }

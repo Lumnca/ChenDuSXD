@@ -101,8 +101,9 @@
 
 
 
-                        <el-dialog title="修改信息" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+                        <el-dialog title="修改信息" :visible.sync="dialogVisible" width="30%">
                             <el-form ref="user" :model="user" label-width="80px">
+
                                 <el-form-item label="账户">
                                     <el-input v-model="user._username"></el-input>
                                 </el-form-item>
@@ -115,12 +116,14 @@
                                     </el-checkbox-group>
                                 </el-form-item>
 
-
+                                <el-form-item label="重置密码">
+                                    <el-input v-model="user.password"></el-input>
+                                </el-form-item>
 
                             </el-form>
                             <span slot="footer" class="dialog-footer">
                                 <el-button @click="dialogVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                                <el-button type="primary" @click="updateUserPassword(user)">确 定</el-button>
                             </span>
                         </el-dialog>
                         <br>
