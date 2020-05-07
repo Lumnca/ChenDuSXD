@@ -14,17 +14,17 @@ public class DbApi {
     DbMapper dbMapper;
     @CrossOrigin
     @GetMapping("/tg_article/{id}")
-    public List<Article> getTGArticle(@PathVariable Integer id){
+    public List<Article> getTGArticle(@PathVariable String id){
         return dbMapper.getArtivle1(id);
     }
     @CrossOrigin
     @GetMapping("/er_article/{id}")
-    public List<Article> getERArticle(@PathVariable Integer id){
+    public List<Article> getERArticle(@PathVariable String id){
         return dbMapper.getArtivle3(id);
     }
     @CrossOrigin
     @GetMapping("/sh_article/{id}")
-    public List<Article> getTSHArticle(@PathVariable Integer id){
+    public List<Article> getTSHArticle(@PathVariable String id){
         return dbMapper.getArtivle2(id);
     }
     @CrossOrigin

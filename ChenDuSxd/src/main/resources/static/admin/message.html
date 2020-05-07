@@ -87,7 +87,7 @@
                                 label="来源"
                                 width="180">
                             <template slot-scope="scope">
-                                {{ scope.row.name }}
+                                {{ scope.row.source }}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -104,47 +104,13 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                <el-button size="mini" @click="handleEdit(scope.row)">确认已读</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
-
-
-
-                    <el-dialog title="修改信息" :visible.sync="dialogVisible" width="30%">
-                        <el-form ref="user" :model="user" label-width="80px">
-
-                            <el-form-item label="账户">
-                                <el-input v-model="user._username"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="权限">
-                                <el-checkbox-group v-model="user.roles">
-                                    <el-checkbox label="数据库管理员" name="auth1"></el-checkbox>
-                                    <el-checkbox label="系统管理员" name="auth2"></el-checkbox>
-                                    <el-checkbox label="用户" name="auth3"></el-checkbox>
-                                </el-checkbox-group>
-                            </el-form-item>
-
-                            <el-form-item label="重置密码">
-                                <el-input v-model="user.password"></el-input>
-                            </el-form-item>
-
-                        </el-form>
-                        <span slot="footer" class="dialog-footer">
-                                <el-button @click="dialogVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="updateUserPassword(user)">确 定</el-button>
-                            </span>
-                    </el-dialog>
                     <br>
                     <div style="padding:40px;">
-                        <el-button size="medium" @click="dialogVisible = true"><span><i class="el-icon-circle-plus-outline"></i>添加用户</span>
+                        <el-button size="medium" @click="dialogVisible = true"><span><i class="el-icon-circle-plus-outline"></i>添加信息</span>
                         </el-button>
                     </div>
                     <div style="text-align:center;padding:40px;">
@@ -153,6 +119,33 @@
                     </div>
                 </div>
 
+                <el-dialog
+                        title="提示"
+                        :visible.sync="dialogVisible"
+                        width="30%">
+
+                    <el-form ref="message" :model="message" label-width="80px">
+
+                        <el-form-item label="发送对象">
+                            <el-input v-model="message.object"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="发送人">
+                            <el-input v-model="message.source"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="消息内容">
+                            <el-input type="textarea" v-model="message.content"></el-input>
+                        </el-form-item>
+
+                    </el-form>
+
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="onSubmitMessage(message)">发送</el-button>
+                    </span>
+
+                </el-dialog>
             </el-main>
 
             <el-footer style="margin-top:80px;">
@@ -168,6 +161,13 @@
 </body>
 <script src="js/config.js"></script>
 <script>
-
+    let name = JSON.parse(window.localStorage.getItem("_user")).username;
+    axios.get(host+ '/message/' + name)
+        .then(function (response) {
+            app.messages = response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 </script>
 </html>

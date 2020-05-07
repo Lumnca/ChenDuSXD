@@ -6,7 +6,7 @@ axios.get(host+'/articles/')
     console.log(error);
 });
 
-axios.get(host+'/sh_article/'+app.user.id)
+axios.get(host+'/sh_article/'+app.user.username)
 .then(function (response) {
    app.sh_articles =  response.data;
 })
@@ -14,7 +14,7 @@ axios.get(host+'/sh_article/'+app.user.id)
     console.log(error);
 });
 
-axios.get(host+'/tg_article/'+app.user.id)
+axios.get(host+'/tg_article/'+app.user.username)
 .then(function (response) {
     app.tg_articles =   response.data;
 })
@@ -22,7 +22,7 @@ axios.get(host+'/tg_article/'+app.user.id)
     console.log(error);
 });
 
-axios.get(host+'/er_article/'+app.user.id)
+axios.get(host+'/er_article/'+app.user.username)
 .then(function (response) {
     app.er_articles =  response.data;
 })

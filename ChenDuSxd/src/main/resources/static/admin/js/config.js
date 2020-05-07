@@ -40,7 +40,7 @@ var app = new Vue({
         dialogVisible2 :false,
         dialogVisible3 :false,
         currentPage1 : 0,
-        maxN1 : 100,
+        maxN1 : 10,
         user : {id:'',_username:'',_enabled:'',roles:'',_locked:'',password:''},
         juser: {username:'sang',tel:'41412551',name:'xxx',state:0},
         search : '',
@@ -79,12 +79,34 @@ var app = new Vue({
         },
         act : {id:999,name:'活动名称',number:'0',address:'成都市',start_time:'2020-1-1 12:00',end_time:'2020-1-1 12:00',date:'2020-1-1 12:00',state:0,info:'',uid:0},
         isAdd : false,
-        messages : []
+        messages : [],
+        message : {
+            id :999,
+            date : dateFormat(new Date(),1),
+            source : "管理员",
+            content : "",
+            object : "",
+            uid : "admin",
+            state : 0
+        }
     },
     methods: {
         updateUser(user){
             this.user = user;
             this.dialogVisible = true;
+        },
+        handleEdit(m){
+            m.state = 1;
+            axios.put(host+'/messages/'+m.id, m)
+                .then(function (response) {
+                    app.$message({
+                        message: '确认成功！',
+                        type: 'success'
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
         updateUserPassword(user){
             axios.post(host+'/admin/set',{
@@ -110,6 +132,21 @@ var app = new Vue({
         getPeopleInfo(a){
             window.localStorage.setItem('_ac',JSON.stringify(a));
             this.reherf('people.html');
+        },
+        onSubmitMessage(message){
+            axios.post(host+'/messages',message)
+                .then(function (response) {
+
+                    app.$message("发送成功！");
+
+                    operationPost("发送消息",  message.uid +" 向 "+ message.object +"  发送了一条信息");
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+
+            this.dialogVisible = false;
         },
         updateActiveInfo(a){
             this.act = a;

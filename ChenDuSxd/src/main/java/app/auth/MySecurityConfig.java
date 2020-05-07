@@ -63,8 +63,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         response.setContentType("text/html");
                         response.setCharacterEncoding("UTF-8");
                         PrintWriter out = response.getWriter();
+                        request.getSession().setAttribute("user",principal);
                         out.print("<script type='text/javascript'>alert('登录成功！');  window.localStorage.setItem('_user','"+JSONObject.toJSONString(principal) +"');  window.location.href='index.html';</script>");
-
                     }
                     //登录失败处理
                 }).failureHandler(new AuthenticationFailureHandler(){
@@ -93,7 +93,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 else {
                     map.put("msg","未知错误，登录失败，请联系管理人员");
                 }
-
                 out.print("<script type='text/javascript'>alert('"+JSONObject.toJSONString(map)+"');window.location.href='index.html';</script>");
             }
         }).and()

@@ -17,7 +17,7 @@ public class Article {
     private String publishtime;
     private Integer state;
     private String content;
-    private Integer uid;
+    private String uid;
     private String imgurl;
 
     public String getImgurl() {
@@ -28,11 +28,11 @@ public class Article {
         this.imgurl = imgurl;
     }
 
-    public Integer getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(Integer uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
