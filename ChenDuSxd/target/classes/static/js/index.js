@@ -100,7 +100,7 @@ var app = new Vue({
         form2: {
             title: '',
             type: '',
-            imgurl: '',
+            imgurl: 'lb.png',
             content: ''
         },
         jactive: false,
@@ -118,7 +118,8 @@ var app = new Vue({
         sh_articles: [],
         tg_articles: [],
         er_articles: [],
-        actives: [],
+        actives: [  {id:'1',name:'XXX活动',number:'27',address:'XXXXXX',start_time:'2020-5-1 12:00',end_time:'2020-5-2 12:00',date:'2020-5-3 12:00'},
+            {id:'2',name:'XXX活动',number:'57',address:'XXXXXX',start_time:'2020-5-1 12:00',end_time:'2020-5-2 12:00',date:'2020-5-3 12:00'}],
         active: {
             name: '',
             start_time: '',
@@ -207,9 +208,7 @@ var app = new Vue({
         },
         onSubmitActive(filter) {
             this.actives.forEach(e => {
-
                 e.state = 1;
-
             });
             if (filter.key != '' && filter.place == '') {
                 this.actives.forEach(e => {
@@ -239,8 +238,13 @@ var app = new Vue({
             }
         },
         joinActive(act) {
-            this.active = act;
-            this.jactive2 = true;
+            if(new Date().getTime()>new Date(act.start_time).getTime()&&new Date().getTime()<new Date(act.end_time).getTime()){
+                this.active = act;
+                this.jactive2 = true;
+            }
+            else{
+                app.$message("报名时间不符合！");
+            }
         },
         handleEdit(m){
             m.state = 1;
@@ -420,4 +424,22 @@ function dateFormat(date, type) {
         return (date.getHours() > 9 ? date.getHours() : '0' + date.getHours()) + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + ":" + (date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
     }
 }
+
+function operationPost(op,info) {
+    let o = {
+        id : 9999,
+        date : dateFormat(new Date(),1),
+        user : JSON.parse(window.localStorage.getItem("_user")).username,
+        operation : op,
+        info : info
+    }
+    axios.post(host+'/ols', o)
+        .then(function (response) {
+            console.log("POST YES");
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
 

@@ -38,6 +38,7 @@ public class DbApi {
         Response response = new Response(0,"");
 
         if(dbMapper.enrollActive(enroll)!=0){
+            dbMapper.activeAddNumber(enroll.getAid());
             response.setCode(200);
             response.setMessage("添加数据成功！");
         }

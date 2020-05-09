@@ -1,17 +1,19 @@
 package app.file;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @CrossOrigin
 @RestController
 public class FileOperation {
+    @Autowired
+    FileManage fileManage;
     @PostMapping("/upload")
     public  void upload(MultipartFile uploadFile, HttpServletRequest request){
         if (uploadFile.isEmpty()) {
@@ -28,6 +30,9 @@ public class FileOperation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+    }
+    @GetMapping("/files/{path}")
+    public List<ImgFile> getFileList(@PathVariable(name = "path")String path){
+        return fileManage.getFileList(path);
     }
 }

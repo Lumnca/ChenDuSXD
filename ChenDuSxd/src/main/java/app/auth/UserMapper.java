@@ -1,8 +1,7 @@
 package app.auth;
 
-import app.admin.LoginLog;
+import app.log.LoginLog;
 import app.jpa.Users;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

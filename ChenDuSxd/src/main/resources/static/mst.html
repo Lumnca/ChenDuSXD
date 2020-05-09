@@ -99,7 +99,7 @@
                                 .
                             </el-col>
                             <el-col :span="20">
-                                <div class="mst"  v-for="a in articles" v-if="a.state==1&&a.sortid==2" @click="mst(a)">
+                                <div class="mst"  v-for="a in articles" v-if="a.state==1&&(a.sortid==2||a.sortid==3)" @click="mst(a)">
                                     <el-row>
                                         <el-col :span="24">
                                             <el-card>
@@ -155,9 +155,9 @@
                         </div>
                     </el-main>
                     <el-footer style="margin-top:80px;">
-                        Copyright © 2020 Tencent. All Rights Reserved.
+                        Copyright © 2020 Newmntry. All Rights Reserved.
                         <br>
-                        XXXX有限公司 版权所有
+                        成都少先队 版权所有
                     </el-footer>
                 </el-container>
             </el-container>

@@ -4,6 +4,7 @@ import app.auth.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface DbMapper {
     @Select("SELECT * FROM tb_article where uid = #{uid} and state = -1;")
     List<Article> getArtivle3(String uid);
 
-    @Select("SELECT * FROM Authentication.tb_active where state = 1;")
+    @Select("SELECT * FROM Authentication.tb_active")
     List<Active> getActive();
 
     @Insert("insert into Authentication.tb_enroll values(#{aid},#{uid},#{state},#{date},#{name},#{telphone},#{aname})")
@@ -38,4 +39,7 @@ public interface DbMapper {
 
     @Select("SELECT * FROM Authentication.tb_message where object = #{user}")
     List<Message> getUserMessage(String user);
+
+    @Update("UPDATE Authentication.tb_active SET number = (number+1) WHERE id = #{aid}")
+    Integer activeAddNumber(Integer aid);
 }

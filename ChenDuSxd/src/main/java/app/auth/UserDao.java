@@ -1,6 +1,6 @@
 package app.auth;
 
-import app.admin.LoginLog;
+import app.log.LoginLog;
 import app.jpa.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

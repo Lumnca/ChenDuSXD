@@ -3,12 +3,16 @@ package app.file;
 
 
 import app.reponse.Response;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件服务器
  */
+@Service
 public class FileManage implements Operation {
 
     /**
@@ -73,5 +77,28 @@ public class FileManage implements Operation {
 
         }
         return res;
+    }
+
+    @Override
+    public List<ImgFile> getFileList(String path) {
+        File file = new File(System.getProperty("user.dir")+"/static/"+path);
+        List<ImgFile> files = new ArrayList<>();
+
+        try {
+
+            for (File f:file.listFiles()
+            ) {
+                ImgFile imgFile = new ImgFile();
+                imgFile.setSize(f.length());
+                imgFile.setName(f.getName());
+                imgFile.setUrl(f.getAbsolutePath());
+                files.add(imgFile);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return files;
     }
 }

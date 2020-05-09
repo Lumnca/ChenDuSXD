@@ -16,7 +16,8 @@ var eu = [
         menu : [
             {index : '2-1',title : '用户管理',herf : 'user.html'},
             {index : '2-2',title : '提交管理',herf : 'submit.html'},
-            {index : '2-3',title : '信息管理',herf : 'message.html'}
+            {index : '2-3',title : '信息管理',herf : 'message.html'},
+            {index : '2-4',title : '资源管理',herf : 'file.html'}
         ]
     },
     {
@@ -77,7 +78,7 @@ var app = new Vue({
             content : '',
             imgurl : ''
         },
-        act : {id:999,name:'活动名称',number:'0',address:'成都市',start_time:'2020-1-1 12:00',end_time:'2020-1-1 12:00',date:'2020-1-1 12:00',state:0,info:'',uid:0},
+        act : {id:999,name:'活动名称',number:'0',address:'成都市',start_time:'2020-1-1 12:00',end_time:'2020-1-1 12:00',date:'2020-1-1 12:00',state:1,info:'',uid:0},
         isAdd : false,
         messages : [],
         message : {
@@ -192,7 +193,7 @@ var app = new Vue({
                          type: 'success'
                      });
 
-                     operationPost("添加活动！","用户ID为："+act.uid+" 添加了ID为："+act.id+" 的活动")
+                     operationPost("添加活动！","用户ID为："+act.uid+" 添加了名称为："+act.name+" 的活动")
                  })
                  .catch(function (error) {
                      app.$message("操作失败！");

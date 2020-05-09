@@ -107,6 +107,7 @@
                                     <el-option label="新都区" value="新都区"></el-option>
                                     <el-option label="温江区" value="温江区"></el-option>
                                     <el-option label="双流区" value="双流区"></el-option>
+                                    <el-option label="高新区" value="高新区"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item>
@@ -120,7 +121,7 @@
                             <el-col :span="20" style="text-align: left">
                                 <el-row v-for="i in Math.ceil(actives.length/4)" style="margin-top:40px;">
                                     <el-col :span="5" v-for="(o,r) in 4" :key="r" :offset="r > 0 ? 1 : 0"
-                                        v-if="actives[(i-1)*4+r]!=null&&actives[(i-1)*4+r].state!=0">
+                                        v-if="actives[(i-1)*4+r]!=null&&actives[(i-1)*4+r].state==1">
                                         <div>
                                             <el-card :body-style="{ padding: '0px' }">
                                                 <img src="img/sxd.jpg" class="image" width="120">
@@ -134,10 +135,24 @@
                                                     <div style="color: #bbbbbb;font-size: 12px;">
                                                         <span>{{actives[(i-1)*4+r].address}}</span>
                                                     </div>
-                                                    <div><span
-                                                            style="color: #c44040;font-size: 14px;">{{actives[(i-1)*4+r].number}}
-                                                        </span>
-                                                        <span style="color: #bbbbbb;font-size: 12px;">人已报名</span>
+                                                    <div>
+                                                        <el-row>
+                                                            <el-col :span="6"><div>
+                                                                <span
+                                                                        style="color: #c44040;font-size: 14px;">{{actives[(i-1)*4+r].number}}
+                                                                     </span>
+                                                                <span style="color: #bbbbbb;font-size: 12px;">人已报名</span>
+                                                            </div></el-col>
+
+                                                            <el-col :span="12"><div>&nbsp;</div></el-col>
+
+                                                            <el-col :span="6"><div>
+                                                                <el-tag v-if="new Date(actives[(i-1)*4+r].start_time).getTime()<new Date().getTime()&&new Date(actives[(i-1)*4+r].end_time).getTime()>new Date().getTime()"   type="success">招募中</el-tag>
+                                                                <el-tag v-else-if="new Date(actives[(i-1)*4+r].start_time).getTime()>new Date().getTime()"  type="info">未开始</el-tag>
+                                                                <el-tag v-else="danger">已结束</el-tag>
+                                                            </div></el-col>
+                                                        </el-row>
+
                                                     </div>
 
                                                 </div>
@@ -187,9 +202,9 @@
                         </el-dialog>
                     </el-main>
                     <el-footer style="margin-top:80px;">
-                        Copyright © 2020 Tencent. All Rights Reserved.
+                        Copyright © 2020 Newmntry. All Rights Reserved.
                         <br>
-                        XXXX有限公司 版权所有
+                        成都少先队 版权所有
                     </el-footer>
                 </el-container>
             </el-container>
