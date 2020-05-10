@@ -110,7 +110,15 @@
                             </el-table>
 
                             <div style="text-align:center;padding:40px;">
-                                <el-pagination  @current-change="handleCurrentChange3" background layout="prev, pager, next"  :page-size="10"  :total="maxN1"  :current-page="currentPage1">
+                                <el-pagination
+                                        @current-change="handleCurrentChange3"
+                                        background layout="prev, pager, next,sizes"
+                                        @size-change="handleSizeChange"
+                                        :page-size="sizes"
+                                        :total="maxN1"
+                                        :current-page="currentPage1"
+                                        :page-sizes="[10, 20, 30, 40 ,50]"
+                                >
                                 </el-pagination>
                             </div>
                             <el-dialog

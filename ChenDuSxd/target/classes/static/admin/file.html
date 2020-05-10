@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.1/lib/index.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>资源文件</title>
+    <style>
+        @import url("https://unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
+
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            color: #333;
+        }
+
+        .el-footer {
+            background-color: #444444;
+            color: #eeeeee;
+            text-align: center;
+            padding: 80px 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+    <el-container style="height: 1000px; border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+            <el-menu :default-openeds="['1', '3']">
+                <el-submenu v-for="e in menu" :index="e.index">
+                    <template slot="title"><i :class="e.icon"></i>{{e.title}}</template>
+                    <el-menu-item-group>
+                        <el-menu-item v-for="m in e.menu" :index="m.index">
+                            <el-link :underline="false" :href="m.herf">{{m.title}} </el-link>
+                        </el-menu-item>
+                    </el-menu-item-group>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <el-header style="text-align: right; font-size: 12px">
+                <el-dropdown>
+                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item><span><i class="el-icon-arrow-right"></i><a href="/index.html">退出</a></span></el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <span>Admin</span>
+            </el-header>
+
+            <el-main>
+                <div>
+                    <el-table
+                            :data="files"
+                            style="width: 100%">
+                        <el-table-column
+                                label="文件名">
+                            <template slot-scope="scope">
+                                <i class="el-icon-tickets"></i>
+                                <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="目录"
+                                >
+                            <template slot-scope="scope">
+                                <el-popover trigger="hover" placement="top">
+                                    <img :src="'http://127.0.0.1:81/public/'+ scope.row.name" width="200" height="80">
+                                    <div slot="reference" class="name-wrapper">
+                                        <el-tag size="medium">{{ scope.row.url }}</el-tag>
+                                    </div>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="文件大小"
+                                width="180">
+                            <template slot-scope="scope">
+                                <i class="el-icon-picture"></i>
+                                <span style="margin-left: 10px">{{ scope.row.size/1000 }} KB </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button
+                                        size="mini"
+                                        type="danger"
+                                        @click="handleDeleteFile(scope.row)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                </div>
+
+            </el-main>
+
+            <el-footer style="margin-top:80px;">
+                Copyright © 2020 Newmntry. All Rights Reserved.
+                <br>
+                成都少先队 版权所有
+            </el-footer>
+        </el-container>
+
+
+    </el-container>
+</div>
+</body>
+<script src="js/config.js"></script>
+<script>
+
+    axios.get(host+'/admin/files/public')
+        .then(function (response) {
+          app.files = response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+</script>
+</html>

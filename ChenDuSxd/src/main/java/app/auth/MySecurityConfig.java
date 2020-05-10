@@ -44,7 +44,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/admin/**")
                 .hasRole("admin")
-                .antMatchers("/db/**")
+                .antMatchers("/log/**")
                 .hasRole("dba")
                 .antMatchers("/user/**")
                 .hasRole("user")
@@ -55,10 +55,14 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
                             , Authentication auth)throws IOException {
-                        Object principal = auth.getPrincipal();
                         response.setContentType("text/html");
                         response.setCharacterEncoding("UTF-8");
                         PrintWriter out = response.getWriter();
+                        if(!request.getParameter("code").toLowerCase().equals(request.getSession().getAttribute("code").toString().toLowerCase())){
+                            out.print("<script type='text/javascript'>alert('验证码错误！'); window.location.href='/logout';</script>");
+                            return;
+                        }
+                        Object principal = auth.getPrincipal();
                         request.getSession().setAttribute("user",principal);
                         out.print("<script type='text/javascript'>alert('登录成功！');  window.localStorage.setItem('_user','"+JSONObject.toJSONString(principal) +"');  window.location.href='index.html';</script>");
                     }

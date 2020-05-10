@@ -82,8 +82,16 @@
                                         <input type="password" class="form-control" id="pwd"
                                             placeholder="Enter password" name="password">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="code"><span class="el-icon-postcard"></span> 验证码</label>
+                                        <input type="text" class="form-control" id="code" placeholder="Enter code" name="code">
+                                        <div style="margin: 12px">
+                                            <canvas id="canvas" width="120" height="40"></canvas>
+                                            <el-button type="text" @click="changeImg">看不清，换一张</el-button>
+                                        </div>
+                                    </div>
                                     <div class="form-check">
-                                       <a href="#">忘记密码？</a> | <a href="register.html">注册账号</a>
+                                       <a href="findpw.html">忘记密码？</a> | <a href="register.html">注册账号</a>
                                     </div>
                                     <button type="submit" class="btn btn-primary"> &nbsp;登录&nbsp; </button>
                                 </form>

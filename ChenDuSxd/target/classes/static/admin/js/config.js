@@ -6,7 +6,8 @@ var eu = [
         icon: 'el-icon-tickets',
         menu : [
             {index : '1-1',title : '登录日志',herf : 'loginlog.html'},
-            {index : '1-2',title : '操作日志',herf : 'operlog.html'}
+            {index : '1-2',title : '操作日志',herf : 'operlog.html'},
+            {index : '1-3',title : '运行日志',herf : 'runlog.html'}
         ]
     },
     {
@@ -50,6 +51,7 @@ var app = new Vue({
         ],
         opes :[
         ],
+        sizes : 10,
         users : [],
         articles : [
             {id:1,date:'2020-5-2 12:41',info:'',username:'sang',title:'云骑士',state:1},
@@ -89,7 +91,9 @@ var app = new Vue({
             object : "",
             uid : "admin",
             state : 0
-        }
+        },
+        runs : [],
+        files : []
     },
     methods: {
         updateUser(user){
@@ -254,11 +258,14 @@ var app = new Vue({
                 });
             this.dialogVisible2 = false;
         },
+        handleSizeChange(val) {
+          app.sizes = val;
+        },
         handleCurrentChange(val) {
             axios.get(host+'/lls/',{
                 params:{
                     page : val-1,
-                    size:10
+                    size: app.sizes
                 }
             })
                 .then(function (response) {
@@ -273,7 +280,7 @@ var app = new Vue({
             axios.get(host+'/ols/',{
                 params:{
                     page : val-1,
-                    size:10
+                    size: app.sizes
                 }
             })
                 .then(function (response) {
@@ -288,12 +295,27 @@ var app = new Vue({
             axios.get(host+'/articles/',{
                 params:{
                     page : val-1,
-                    size:10
+                    size: app.sizes
                 }
             })
                 .then(function (response) {
                     app.maxN1 = response.data.page.totalElements;
                     app.articles = response.data._embedded.articles;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        handleCurrentChange4(val) {
+            axios.get(host+'/rls/',{
+                params:{
+                    page : val-1,
+                    size: app.sizes
+                }
+            })
+                .then(function (response) {
+                    app.maxN1 = response.data.page.totalElements;
+                    app.runs = response.data._embedded.runLogs;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -336,6 +358,17 @@ var app = new Vue({
                     console.log(error);
                 });
             this.dialogVisible = false;
+        },
+        handleDeleteFile(file){
+            axios.delete(host+'/admin/delete/'+file.name)
+            .then(function (response) {
+                app.$message(response.data.message);
+                operationPost("删除文件","用户 admin 删除了文件,文件url: "+file.url)
+            })
+            .catch(function (error) {
+                app.$message("操作失败！");
+                console.log(error);
+            });
         },
         lockedUser(user){
 

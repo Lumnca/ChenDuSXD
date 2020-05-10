@@ -12,5 +12,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 724119519@qq.com
+    password: ucfpbggwfeqkbbjh
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+      debug: true
 server:
   port: 81

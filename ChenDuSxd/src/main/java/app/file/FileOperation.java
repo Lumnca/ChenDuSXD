@@ -1,5 +1,6 @@
 package app.file;
 
+import app.reponse.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +32,12 @@ public class FileOperation {
             e.printStackTrace();
         }
     }
-    @GetMapping("/files/{path}")
+    @GetMapping("/admin/files/{path}")
     public List<ImgFile> getFileList(@PathVariable(name = "path")String path){
         return fileManage.getFileList(path);
+    }
+    @DeleteMapping("/admin/delete/{path}")
+    public Response deleteFile(@PathVariable(name = "path")String path){
+        return fileManage.delete(path);
     }
 }

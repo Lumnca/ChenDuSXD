@@ -80,4 +80,8 @@ public class DbApi {
     public List<Message> getUserMessage(@PathVariable String name){
         return dbMapper.getUserMessage(name);
     }
+    @GetMapping("/ts/{n}")
+    public int getA(@PathVariable(name = "n")int n){
+        return 5/n;
+    }
 }

@@ -62,7 +62,7 @@
 
                 <el-main>
                     <div>
-                        <el-table :data="opes" border style="width: 100%">
+                        <el-table :data="opes.filter(data => !search || data.operation.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
                             <el-table-column prop="date" label="日期" width="280">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
@@ -82,6 +82,12 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="info" label="描述">
+                                <template slot="header" slot-scope="scope">
+                                    <el-input
+                                            v-model="search"
+                                            size="mini"
+                                            placeholder="输入操作搜索"/>
+                                </template>
                                 <template slot-scope="scope">
                                     <i class="el-icon-edit-outline"></i>
                                     <span style="margin-left: 10px;color: #86bcee;">{{ scope.row.info }}</span>
@@ -89,7 +95,15 @@
                             </el-table-column>
                         </el-table>
                         <div style="text-align:center;padding:40px;">
-                            <el-pagination  @current-change="handleCurrentChange2" background layout="prev, pager, next"  :page-size="10"  :total="maxN1"  :current-page="currentPage1">
+                            <el-pagination
+                                    @current-change="handleCurrentChange2"
+                                    @size-change="handleSizeChange"
+                                    background layout="prev, pager, next ,sizes"
+                                    :page-size="sizes"
+                                    :page-sizes="[10, 20, 30, 40 ,50]"
+                                    :total="maxN1"
+                                    :current-page="currentPage1"
+                            >
                             </el-pagination>
                         </div>
                     </div>

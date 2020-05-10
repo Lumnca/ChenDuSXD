@@ -61,7 +61,9 @@ var app = new Vue({
             checkPass: '',
             tel: '',
             username: '',
-            result: -1
+            result: -1,
+            email : '',
+            auth:''
         },
         rules: {
             password: [
@@ -75,6 +77,12 @@ var app = new Vue({
             ],
             username: [
                 { validator: validateID, trigger: 'blur' }
+            ],
+            email: [
+                { validator: validateID, trigger: 'blur' }
+            ],
+            auth: [
+                { validator: validateID, trigger: 'blur' }
             ]
         },
         user: JSON.parse(gets("_user")) || { id: '', name: 'Lumnca' },
@@ -86,6 +94,8 @@ var app = new Vue({
         currentPage: 1,
         pages: 5,
         activeName: 'first',
+        disabled : false,
+        disabledTest : '',
         form: {
             name: '周士林',
             region: '是',
@@ -154,7 +164,6 @@ var app = new Vue({
             this.reload('info.html');
         },
         submitForm(formName) {
-
             this.$refs[formName].validate((valid) => {
 
                 if (valid) {
@@ -176,7 +185,7 @@ var app = new Vue({
                             window.location.href = "index.html";
                         })
                         .catch(function (error) {
-                            this.$message.error('检查错误');
+                            app.$message.error('检查错误');
                         });
 
                 } else {
@@ -184,6 +193,53 @@ var app = new Vue({
                     return false;
                 }
             });
+        },
+        submitForm2(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    axios.post(host+ '/reuser',{
+                        username : app.loginForm.username,
+                        auth : app.loginForm.auth,
+                        password : app.loginForm.password
+                    })
+                        .then(function (response) {
+                            app.$message({
+                                message: response.data.message,
+                                type: 'info'
+                            });
+
+                            operationPost("密码重置！",app.loginForm.username+" 用户密码被重置！");
+
+                            setTimeout(()=>{
+                                window.location.href = "index.html";
+                            },3000);
+                        })
+                        .catch(function (error) {
+                            app.$message.error('检查错误');
+                        });
+                }
+                else{
+                     app.$message.error('验证错误！检查输入');
+                     return false;
+                }
+        });
+        },
+        getAuthCode(email){
+            axios.post(host+ '/sendMail',{
+                to : email
+            })
+                .then(function (response) {
+                    app.$message({
+                        message: response.data,
+                        type: 'info'
+                    });
+                    operationPost("发送验证码",app.loginForm.username + " 用户接收了验证码");
+                })
+                .catch(function (error) {
+                    app.$message.error('检查错误');
+                });
+
+             this.disabled = true;
         },
         out() {
             this.user = { id: '' }
@@ -391,6 +447,9 @@ var app = new Vue({
                     app.$message.error('操作出错！');
                     console.log(error);
                 });
+        },
+        changeImg(){
+            drawPic();
         }
     },
     computed: {
@@ -426,10 +485,17 @@ function dateFormat(date, type) {
 }
 
 function operationPost(op,info) {
+    let user = "";
+    if (window.localStorage.getItem("_user")==null||window.localStorage.getItem("_user")==""){
+        user = "guest";
+    }
+    else{
+        user = JSON.parse(window.localStorage.getItem("_user")).username;
+    }
     let o = {
         id : 9999,
         date : dateFormat(new Date(),1),
-        user : JSON.parse(window.localStorage.getItem("_user")).username,
+        user : user,
         operation : op,
         info : info
     }
@@ -443,3 +509,78 @@ function operationPost(op,info) {
 }
 
 
+
+
+/**生成一个随机数**/
+function randomNum(min,max){
+    return Math.floor( Math.random()*(max-min)+min);
+}
+/**生成一个随机色**/
+function randomColor(min,max){
+    var r = randomNum(min,max);
+    var g = randomNum(min,max);
+    var b = randomNum(min,max);
+    return "rgb("+r+","+g+","+b+")";
+}
+
+/**绘制验证码图片**/
+function drawPic(){
+    var canvas=document.getElementById("canvas");
+    var width=canvas.width;
+    var height=canvas.height;
+    var ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'bottom';
+
+    /**绘制背景色**/
+    ctx.fillStyle = randomColor(180,240); //颜色若太深可能导致看不清
+    ctx.fillRect(0,0,width,height);
+    /**绘制文字**/
+    var str = 'ABCEFGHJKLMNPQRSTWXYabcdefghijklimnopqrstuvwxyz1234567890';
+    var v = "";
+    for(var i=0; i<4; i++){
+        var txt = str[randomNum(0,str.length)];
+        v += txt;
+        ctx.fillStyle = randomColor(50,160);  //随机生成字体颜色
+        ctx.font = randomNum(15,40)+'px SimHei'; //随机生成字体大小
+        var x = 10+i*25;
+        var y = randomNum(25,45);
+        var deg = randomNum(-45, 45);
+        //修改坐标原点和旋转角度
+        ctx.translate(x,y);
+        ctx.rotate(deg*Math.PI/180);
+        ctx.fillText(txt, 0,0);
+        //恢复坐标原点和旋转角度
+        ctx.rotate(-deg*Math.PI/180);
+        ctx.translate(-x,-y);
+    }
+
+
+
+
+    /**绘制干扰线**/
+    for(var i=0; i<8; i++){
+        ctx.strokeStyle = randomColor(40,180);
+        ctx.beginPath();
+        ctx.moveTo( randomNum(0,width), randomNum(0,height) );
+        ctx.lineTo( randomNum(0,width), randomNum(0,height) );
+        ctx.stroke();
+    }
+    /**绘制干扰点**/
+    for(var i=0; i<100; i++){
+        ctx.fillStyle = randomColor(0,255);
+        ctx.beginPath();
+        ctx.arc(randomNum(0,width),randomNum(0,height), 1, 0, 2*Math.PI);
+        ctx.fill();
+    }
+
+    axios.post(host+'/write',{
+        key : "code",
+        value : v
+    })
+        .then(function (response) {
+            console.log(response.data.message);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}

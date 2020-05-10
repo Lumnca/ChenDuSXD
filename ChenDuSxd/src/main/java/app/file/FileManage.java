@@ -5,7 +5,9 @@ package app.file;
 import app.reponse.Response;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Service
 public class FileManage implements Operation {
+    private static final String localPath = System.getProperty("user.dir")+"/static/";
 
     /**
      * 暂用
@@ -63,7 +66,7 @@ public class FileManage implements Operation {
     public Response delete(String file) {
         Response res = new Response(0,"");
         try {
-            File file1 = new File(System.getProperty("user.dir")+"/"+file);
+            File file1 = new File(System.getProperty("user.dir")+"/static/public/"+file);
             if( file1.delete()){
                 res.setCode(106);
                 res.setMessage("删除成功！");
@@ -100,5 +103,18 @@ public class FileManage implements Operation {
         }
 
         return files;
+    }
+
+    @Override
+    public void write(String path, String content) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(localPath+path,true));
+            writer.newLine();
+            writer.write(content);
+            writer.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -13,4 +13,6 @@ public interface Operation {
     Response delete(String file);
     //返回文件信息列表
     List<ImgFile> getFileList(String path);
+    //写入操作
+    void write(String path,String content);
 }
