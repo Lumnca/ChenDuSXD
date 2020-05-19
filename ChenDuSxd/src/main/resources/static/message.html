@@ -113,6 +113,45 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <br>
+                <div style="padding:40px;">
+                    <el-button size="medium" @click="dialogVisible = true"><span><i class="el-icon-circle-plus-outline"></i>反馈信息</span>
+                    </el-button>
+                </div>
+                <el-dialog
+                        title="提示"
+                        :visible.sync="dialogVisible"
+                        width="30%">
+
+                    <el-form ref="message" :model="message" label-width="80px">
+
+                        <el-form-item label="发送对象">
+                            <el-input disabled v-model="message.object"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="发送人">
+                            <el-input v-model="message.source"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="消息内容">
+                            <el-input type="textarea" v-model="message.content"></el-input>
+                        </el-form-item>
+
+                    </el-form>
+
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="onSubmitMessage(message)">发送</el-button>
+                    </span>
+
+                </el-dialog>
+
+                <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="onSubmitMessage(message)">发送</el-button>
+                    </span>
+
+                </el-dialog>
             </el-main>
 
 

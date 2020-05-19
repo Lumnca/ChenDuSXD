@@ -18,7 +18,8 @@ var eu = [
             {index : '2-1',title : '用户管理',herf : 'user.html'},
             {index : '2-2',title : '提交管理',herf : 'submit.html'},
             {index : '2-3',title : '信息管理',herf : 'message.html'},
-            {index : '2-4',title : '资源管理',herf : 'file.html'}
+            {index : '2-4',title : '资源管理',herf : 'file.html'},
+            {index : '2-5',title : '权限管理',herf : 'menu.html'}
         ]
     },
     {
@@ -93,7 +94,20 @@ var app = new Vue({
             state : 0
         },
         runs : [],
-        files : []
+        files : [],
+        menuRoles : [{
+            id : 100,
+            pattern : "2",
+            rname : "42",
+            rnameZh : "242",
+            rid : ''
+        }],
+        menuRole:{
+            id : 100,
+            pattern : "",
+            rname : "",
+            rnameZh : ""
+        }
     },
     methods: {
         updateUser(user){
@@ -207,6 +221,90 @@ var app = new Vue({
 
 
           this.dialogVisible3 = false;
+        },
+        updateMenu1(m){
+            this.dialogVisible = true;
+            this.menuRole = m;
+        },
+        updateMenu2(m){
+            axios.post(host+'/admin/updateMenu',{
+                id : m.id,
+                pattern : m.pattern
+            })
+                .then(function (response) {
+                    app.$message({
+                        message: response.data.message
+                    });
+                    operationPost("修改url拦截格式","修改了ID为："+m.id+"的路由 格式为："+m.pattern)
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+            this.dialogVisible = false;
+        },
+        deleteMenu(m){
+            axios.delete(host+'/admin/deleteMenu/'+m.id)
+                .then(function (response) {
+
+                    axios.delete(host+'/admin/deleteMenuRole/'+m.id)
+                        .then(function (response) {
+
+                            app.$message({
+                                message: response.data.message
+                            });
+
+                            operationPost("删除url拦截格式","删除ID为："+m.id+"的路由 格式为："+m.pattern);
+
+                            setTimeout(()=>{
+                                window.location.reload();
+                            },2000);
+
+                        })
+                        .catch(function (error) {
+                            app.$message("操作失败！");
+                            console.log(error);
+                        });
+
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+        },
+        insertMenu(m){
+
+            axios.post(host+'/admin/insertMenu',{
+                id : m.id,
+                pattern : m.pattern
+            })
+                .then(function (response) {
+
+                    axios.post(host+'/admin/addMenuRole',{
+                        mid : m.id,
+                        rid : m.rid
+                    })
+                        .then(function (response) {
+                            app.$message({
+                                message: response.data.message
+                            });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                    operationPost("添加url拦截格式","添加了ID为："+m.id+"的路由 格式为："+m.pattern);
+
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },2000);
+
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+            this.dialogVisible2 = false;
         },
         dealUser(user){
             this.juser = user;

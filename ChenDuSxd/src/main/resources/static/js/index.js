@@ -153,11 +153,37 @@ var app = new Vue({
         tg : [],
         xx : [],
         hr : [],
-        messages : []
+        messages : [],
+        dialogVisible : false,
+        message : {
+            id :999,
+            date : dateFormat(new Date(),1),
+            source : "用户",
+            content : "",
+            object : "admin",
+            uid : "",
+            state : 0
+        }
     },
     methods: {
         reload(url) {
             window.location.href = url;
+        },
+        onSubmitMessage(message){
+            message.uid =  JSON.parse(window.localStorage.getItem("_user")).id;
+            axios.post(host+'/messages',message)
+                .then(function (response) {
+
+                    app.$message("发送成功！");
+
+                    operationPost("发送消息",  message.uid +" 向 "+ message.object +"  发送了一条信息");
+                })
+                .catch(function (error) {
+                    app.$message("操作失败！");
+                    console.log(error);
+                });
+
+            this.dialogVisible = false;
         },
         showXX(p){
             sets("_xx",JSON.stringify(p));
